@@ -684,7 +684,7 @@
       });
 
       // 3. Redirect to welcome page
-      window.location.href = 'https://consol3990.github.io/oneserv1/welcome';
+      window.location.href = 'https://consol3990.github.io/oneserv1/welcome.html';
 
     } catch (err) {
       showAlert(err.message, 'error');
