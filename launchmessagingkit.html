@@ -240,7 +240,7 @@
   .pace-day { font-size:11px; color:var(--muted); display:block; margin-bottom:3px; font-family:'DM Mono',monospace; }
   .pace-num { font-size:15px; font-weight:600; color:var(--text); display:block; }
   .pace-card-launch .pace-num { color:var(--green); }
-  /* 14-Day Plan styles */
+  /* 16-Day Plan styles */
   .plan-phase { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
   .plan-phase-header { padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
   .plan-phase-title { font-size:14px; font-weight:600; color:var(--text); }
@@ -300,7 +300,40 @@
   .del-btn { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:0 4px; line-height:1; transition:color .15s; }
   .del-btn:hover { color:var(--red); }
   .notes-cell { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-size:12px; }
-  /* ── Follow-up queue ── */
+  /* ── Motivation blocks ── */
+  .motiv-block {
+    border-radius: 10px; padding: 16px 20px; margin: 20px 0;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .motiv-block.scripture {
+    background: rgba(167,139,250,0.06);
+    border-left: 3px solid var(--purple);
+  }
+  .motiv-block.quote {
+    background: rgba(79,127,255,0.05);
+    border-left: 3px solid var(--accent);
+  }
+  .motiv-block.personal {
+    background: rgba(52,211,153,0.06);
+    border-left: 3px solid var(--green);
+  }
+  .motiv-block.big {
+    background: rgba(245,158,11,0.05);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+  .motiv-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .motiv-body { flex: 1; }
+  .motiv-text {
+    font-size: 14px; line-height: 1.75; color: var(--text);
+    font-style: italic; margin-bottom: 5px;
+  }
+  .motiv-text.big-text {
+    font-size: 16px; font-weight: 500; font-style: normal; color: var(--amber); line-height: 1.6;
+  }
+  .motiv-attr { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .motiv-attr span { color: var(--text); }
   .fq-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 15px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px; }
   .fq-item.overdue { border-color:rgba(248,113,113,0.4); background:rgba(248,113,113,0.04); }
   .fq-item.today { border-color:rgba(245,158,11,0.4); background:rgba(245,158,11,0.04); }
@@ -404,6 +437,24 @@
     <p>Demo script · Facebook posts · DM outreach · Landing copy · Objection handlers · Close scripts</p>
   </div>
 
+  <!-- Letter to future self -->
+  <div class="motiv-block personal" style="margin-bottom:16px;">
+    <div class="motiv-icon">✉</div>
+    <div class="motiv-body">
+      <div class="motiv-text">"To my future self — remember what you are building and why you are building it. Generational wealth is just around the corner. Keep going."</div>
+      <div class="motiv-attr">— <span>Dutch Conners</span> · Written before launch day</div>
+    </div>
+  </div>
+
+  <!-- Bob Proctor -->
+  <div class="motiv-block big" style="margin-bottom:20px;">
+    <div class="motiv-icon">🎯</div>
+    <div class="motiv-body">
+      <div class="motiv-text big-text">"Set a goal to achieve something that is so big, so exhilarating that it excites you and scares you at the same time."</div>
+      <div class="motiv-attr">— <span>Bob Proctor</span></div>
+    </div>
+  </div>
+
   <!-- Urgency Bar -->
   <div class="urgency-bar">
     <div class="urg-left">
@@ -417,7 +468,7 @@
   <!-- Tab Nav -->
   <div class="tab-nav">
     <button class="tab-btn active" onclick="showTab('tracker')">Daily Tracker</button>
-    <button class="tab-btn" onclick="showTab('plan')">14-Day Plan</button>
+    <button class="tab-btn" onclick="showTab('plan')">16-Day Plan</button>
     <button class="tab-btn" onclick="showTab('contacts')">Contacts</button>
     <button class="tab-btn" onclick="showTab('followups')">Follow-Up Queue</button>
     <button class="tab-btn" onclick="showTab('scorecard')">Scorecard</button>
@@ -437,7 +488,16 @@
       <span class="sec-badge badge-green">Daily Tracker</span>
       <span class="sec-title">Your 100-Touch War Room</span>
     </div>
-    <p class="sec-desc">Check off every task as you go. Hit 100 touches/day = 400 signups in 14 days. Reset resets today's checkboxes only — your signup count stays.</p>
+
+    <div class="motiv-block scripture">
+      <div class="motiv-icon">📖</div>
+      <div class="motiv-body">
+        <div class="motiv-text">"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."</div>
+        <div class="motiv-attr">— <span>Jeremiah 29:11</span></div>
+      </div>
+    </div>
+
+    <p class="sec-desc">Check off every task as you go. Hit 100 touches/day = 400 signups in 16 days. Reset resets today's checkboxes only — your signup count stays.</p>
 
     <!-- Signup counter -->
     <div class="tracker-header">
@@ -657,15 +717,15 @@
     <!-- Daily pace guide -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:8px;">
       <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
-        <span style="font-size:12px;font-weight:500;color:var(--muted);font-family:'DM Mono',monospace;">14-day pace guide — are you on track?</span>
+        <span style="font-size:12px;font-weight:500;color:var(--muted);font-family:'DM Mono',monospace;">16-day pace guide — are you on track?</span>
       </div>
       <div style="padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;">
-        <div class="pace-card"><span class="pace-day">End of Day 3</span><span class="pace-num">60–75 signups</span></div>
-        <div class="pace-card"><span class="pace-day">End of Day 5</span><span class="pace-num">100–125 signups</span></div>
-        <div class="pace-card"><span class="pace-day">End of Day 7</span><span class="pace-num">150–175 signups</span></div>
-        <div class="pace-card"><span class="pace-day">End of Day 10</span><span class="pace-num">225–260 signups</span></div>
-        <div class="pace-card"><span class="pace-day">End of Day 12</span><span class="pace-num">300–340 signups</span></div>
-        <div class="pace-card pace-card-launch"><span class="pace-day">Launch Day 14</span><span class="pace-num">400 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 3 · Apr 2</span><span class="pace-num">55–70 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 5 · Apr 4</span><span class="pace-num">100–125 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 8 · Apr 7</span><span class="pace-num">175–210 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 11 · Apr 10</span><span class="pace-num">275–310 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 14 · Apr 12</span><span class="pace-num">340–380 signups</span></div>
+        <div class="pace-card pace-card-launch"><span class="pace-day">Launch Day 16 · Apr 14</span><span class="pace-num">400 signups</span></div>
       </div>
     </div>
 
@@ -676,6 +736,14 @@
         <span style="font-size:11px;color:var(--muted);">Click a day to expand and write your notes</span>
       </div>
       <div id="debriefList"></div>
+
+      <div class="motiv-block personal" style="margin-top:20px;">
+        <div class="motiv-icon">🔥</div>
+        <div class="motiv-body">
+          <div class="motiv-text">"Remember what you are building and why you are building it. Generational wealth is just around the corner. Keep going."</div>
+          <div class="motiv-attr">— <span>Dutch Conners</span> · To his future self</div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -720,6 +788,15 @@
       <span class="sec-badge badge-green">Weekly Scorecard</span>
       <span class="sec-title">Are You on Pace?</span>
     </div>
+
+    <div class="motiv-block quote">
+      <div class="motiv-icon">💬</div>
+      <div class="motiv-body">
+        <div class="motiv-text">"As long as you're going to be thinking anyway, think big."</div>
+        <div class="motiv-attr">— <span>Donald Trump</span> · The Trump Organization</div>
+      </div>
+    </div>
+
     <p class="sec-desc">Log your numbers at the end of each week. Green means ahead of pace. Red means you need to push harder next week. All data saves in your browser.</p>
 
     <div class="week-tabs" id="weekTabs"></div>
@@ -883,24 +960,33 @@
     <div class="tip tip-amber"><strong>Text timing matters.</strong> Best windows: 7–8am (before first job), 12–1pm (lunch break), 5–7pm (after last job). Avoid 9–11am and 2–4pm — they're in the field.</div>
   </div>
 
-  <!-- ═══════════════════════════════════════ 14-DAY PLAN ═══ -->
+  <!-- ═══════════════════════════════════════ 16-DAY PLAN ═══ -->
   <div class="panel" id="panel-plan">
     <div class="sec-head">
-      <span class="sec-badge badge-amber">14-Day Plan</span>
-      <span class="sec-title">Mar 27 → Apr 14 · Day by Day</span>
+      <span class="sec-badge badge-amber">16-Day Plan</span>
+      <span class="sec-title">Mar 30 → Apr 14 · Day by Day</span>
     </div>
-    <p class="sec-desc">Your complete day-by-day roadmap from today to launch. Each day has a single primary focus and specific tasks. Treat this as your operating plan — not a suggestion.</p>
+
+    <div class="motiv-block scripture">
+      <div class="motiv-icon">📖</div>
+      <div class="motiv-body">
+        <div class="motiv-text">"Commit to the Lord whatever you do, and he will establish your plans."</div>
+        <div class="motiv-attr">— <span>Proverbs 16:3</span></div>
+      </div>
+    </div>
+
+    <p class="sec-desc">Your complete day-by-day roadmap from Monday March 30 to launch. Each day has a single primary focus and specific tasks. Treat this as your operating plan — not a suggestion.</p>
 
     <div class="plan-phase">
       <div class="plan-phase-header" style="background:rgba(79,127,255,0.08);border-bottom:1px solid rgba(79,127,255,0.15);">
         <span class="plan-phase-title">Phase 1 — Ignition</span>
-        <span class="plan-phase-dates">Mar 27–30 · Days 1–4 · Build the base</span>
+        <span class="plan-phase-dates">Mar 30–Apr 2 · Days 1–4 · Build the base</span>
       </div>
 
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Day 1</span>
-          <span class="plan-day-date">Thu Mar 27</span>
+          <span class="plan-day-date">Mon Mar 30</span>
           <span class="plan-day-focus">Group infiltration + groundwork</span>
           <span class="plan-day-goal goal-amber">Target: 10–15 signups</span>
         </div>
@@ -917,7 +1003,7 @@
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Day 2</span>
-          <span class="plan-day-date">Fri Mar 28</span>
+          <span class="plan-day-date">Tue Apr 1</span>
           <span class="plan-day-focus">First posts go live</span>
           <span class="plan-day-goal goal-amber">Target: 20–25 signups</span>
         </div>
@@ -934,7 +1020,7 @@
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Day 3</span>
-          <span class="plan-day-date">Sat Mar 29</span>
+          <span class="plan-day-date">Wed Apr 2</span>
           <span class="plan-day-focus">Volume outreach day</span>
           <span class="plan-day-goal goal-amber">Target: 25–30 signups</span>
         </div>
@@ -951,7 +1037,7 @@
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Day 4</span>
-          <span class="plan-day-date">Sun Mar 30</span>
+          <span class="plan-day-date">Thu Apr 3</span>
           <span class="plan-day-focus">Engage + follow up everything</span>
           <span class="plan-day-goal goal-amber">Target: 20–25 signups</span>
         </div>
@@ -969,13 +1055,13 @@
     <div class="plan-phase" style="margin-top:12px;">
       <div class="plan-phase-header" style="background:rgba(52,211,153,0.07);border-bottom:1px solid rgba(52,211,153,0.15);">
         <span class="plan-phase-title">Phase 2 — Acceleration</span>
-        <span class="plan-phase-dates">Mar 31–Apr 7 · Days 5–12 · Push hard</span>
+        <span class="plan-phase-dates">Apr 4–10 · Days 5–12 · Push hard</span>
       </div>
 
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Days 5–7</span>
-          <span class="plan-day-date">Mar 31–Apr 2</span>
+          <span class="plan-day-date">Apr 4–6</span>
           <span class="plan-day-focus">Referral engine + full daily rhythm</span>
           <span class="plan-day-goal goal-green">Target: 25–35/day</span>
         </div>
@@ -992,7 +1078,7 @@
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Days 8–10</span>
-          <span class="plan-day-date">Apr 3–5</span>
+          <span class="plan-day-date">Apr 7–9</span>
           <span class="plan-day-focus">Content push + Product Hunt prep</span>
           <span class="plan-day-goal goal-green">Target: 25–30/day</span>
         </div>
@@ -1009,7 +1095,7 @@
       <div class="plan-day">
         <div class="plan-day-header">
           <span class="plan-day-num">Days 11–12</span>
-          <span class="plan-day-date">Apr 6–7</span>
+          <span class="plan-day-date">Apr 10–11</span>
           <span class="plan-day-focus">Pre-launch urgency push</span>
           <span class="plan-day-goal goal-green">Target: 30–40/day</span>
         </div>
@@ -1026,8 +1112,8 @@
 
       <div class="plan-day">
         <div class="plan-day-header">
-          <span class="plan-day-num">Days 13</span>
-          <span class="plan-day-date">Apr 8–13</span>
+          <span class="plan-day-num">Days 13–15</span>
+          <span class="plan-day-date">Apr 12–13</span>
           <span class="plan-day-focus">Final countdown — every channel hot</span>
           <span class="plan-day-goal goal-green">Target: stay on pace</span>
         </div>
@@ -1044,12 +1130,22 @@
     <div class="plan-phase" style="margin-top:12px;">
       <div class="plan-phase-header" style="background:rgba(245,158,11,0.08);border-bottom:1px solid rgba(245,158,11,0.2);">
         <span class="plan-phase-title">Phase 3 — Launch Day</span>
-        <span class="plan-phase-dates">Apr 14 · Day 14 · All hands on deck</span>
+        <span class="plan-phase-dates">Apr 14 · Day 16 · All hands on deck</span>
+      </div>
+
+      <div style="padding:14px 16px 0;">
+        <div class="motiv-block scripture" style="margin-top:0;">
+          <div class="motiv-icon">📖</div>
+          <div class="motiv-body">
+            <div class="motiv-text">"But the plans of the Lord stand firm forever, the purposes of his heart through all generations."</div>
+            <div class="motiv-attr">— <span>Psalm 33:11</span></div>
+          </div>
+        </div>
       </div>
 
       <div class="plan-day" style="border-bottom:none;">
         <div class="plan-day-header" style="background:rgba(245,158,11,0.06);">
-          <span class="plan-day-num" style="color:var(--amber);">Day 14</span>
+          <span class="plan-day-num" style="color:var(--amber);">Day 16</span>
           <span class="plan-day-date">Mon Apr 14</span>
           <span class="plan-day-focus">Launch day blitz</span>
           <span class="plan-day-goal" style="background:rgba(245,158,11,0.15);color:var(--amber);">Target: 40–60 signups</span>
@@ -1209,6 +1305,15 @@
       <span class="sec-badge badge-blue">30-Min Close</span>
       <span class="sec-title">Demo Script — Plumbers Only</span>
     </div>
+
+    <div class="motiv-block quote">
+      <div class="motiv-icon">💬</div>
+      <div class="motiv-body">
+        <div class="motiv-text">"Always deliver more than expected."</div>
+        <div class="motiv-attr">— <span>Larry Page</span> · Co-Founder, Google</div>
+      </div>
+    </div>
+
     <p class="sec-desc">Lead with the pricebook offer for Pro & Business. Mention it early — it's your upgrade lever. Tailor the tier in real time based on how many techs they run.</p>
 
     <div class="timer-row">
@@ -1709,13 +1814,13 @@ function copyBlock(btn) {
 // ─────────────────────────────────────────
 // DAILY DEBRIEF
 // ─────────────────────────────────────────
-const LAUNCH_START = new Date('2025-03-27');
+const LAUNCH_START = new Date('2026-03-30');
 function buildDebriefList() {
   const list = document.getElementById('debriefList');
   if (!list) return;
   list.innerHTML = '';
   const today = new Date(); today.setHours(0,0,0,0);
-  for (let d = 1; d <= 14; d++) {
+  for (let d = 1; d <= 16; d++) {
     const date = new Date(LAUNCH_START); date.setDate(date.getDate() + d - 1);
     const dateStr = date.toISOString().slice(0,10);
     const isPast = date <= today;
@@ -1823,9 +1928,9 @@ function renderFollowUps() {
 // WEEKLY SCORECARD
 // ─────────────────────────────────────────
 const weeks = [
-  { label: 'Week 1', dates: 'Mar 27–30', days: '1–4', goals: { signups: 75, demos: 8, paid: 0, touches: 400 } },
-  { label: 'Week 2', dates: 'Mar 31–Apr 6', days: '5–11', goals: { signups: 210, demos: 25, paid: 15, touches: 700 } },
-  { label: 'Launch Week', dates: 'Apr 7–14', days: '12–14', goals: { signups: 400, demos: 40, paid: 100, touches: 400 } },
+  { label: 'Week 1', dates: 'Mar 30–Apr 2', days: '1–4', goals: { signups: 70, demos: 8, paid: 0, touches: 400 } },
+  { label: 'Week 2', dates: 'Apr 3–9', days: '5–11', goals: { signups: 250, demos: 28, paid: 20, touches: 700 } },
+  { label: 'Launch Week', dates: 'Apr 10–14', days: '12–16', goals: { signups: 400, demos: 40, paid: 100, touches: 500 } },
 ];
 function renderScorecard() {
   const tabsEl = document.getElementById('weekTabs');
