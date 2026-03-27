@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneServ — Launch Messaging Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c26;
+    --surface2: #1e2330;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #e8eaf0;
+    --muted: #7c8499;
+    --accent: #4f7fff;
+    --teal: #2dd4bf;
+    --amber: #f59e0b;
+    --green: #34d399;
+    --red: #f87171;
+    --purple: #a78bfa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    padding: 40px 20px 100px;
+  }
+  .page { max-width: 860px; margin: 0 auto; }
+
+  /* NAV TABS */
+  .tab-nav {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 32px;
+    position: sticky; top: 16px; z-index: 10;
+  }
+  .tab-btn {
+    flex: 1; min-width: 120px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Section header */
+  .sec-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .sec-badge {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .08em;
+    padding: 3px 9px; border-radius: 20px;
+  }
+  .badge-blue { background: rgba(79,127,255,0.12); color: #93b4ff; border: 1px solid rgba(79,127,255,0.25); }
+  .badge-teal { background: rgba(45,212,191,0.1); color: #5eead4; border: 1px solid rgba(45,212,191,0.25); }
+  .badge-amber { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-green { background: rgba(52,211,153,0.1); color: #6ee7c7; border: 1px solid rgba(52,211,153,0.25); }
+  .badge-purple { background: rgba(167,139,250,0.1); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.25); }
+  .badge-red { background: rgba(248,113,113,0.1); color: #fca5a5; border: 1px solid rgba(248,113,113,0.25); }
+  .sec-title { font-size: 18px; font-weight: 600; color: var(--text); }
+  .sec-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+
+  /* Copy blocks */
+  .copy-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .copy-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .copy-title { font-size: 12px; font-weight: 500; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .copy-btn {
+    font-size: 11px; font-weight: 500;
+    padding: 4px 12px; border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: transparent; color: var(--muted);
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all .15s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+  .copy-btn.copied { color: var(--green); border-color: rgba(52,211,153,0.3); }
+  .copy-body {
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #c8d4f0;
+    white-space: pre-wrap;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Tip / note boxes */
+  .tip {
+    border-radius: 8px; padding: 12px 14px;
+    font-size: 13px; line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .tip-blue { background: rgba(79,127,255,0.06); border: 1px solid rgba(79,127,255,0.2); color: #93b4ff; }
+  .tip-amber { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); color: #fbbf24; }
+  .tip-green { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.2); color: #6ee7c7; }
+  .tip strong { color: #fff; font-weight: 500; }
+
+  /* Objection grid */
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  @media(max-width:600px){ .obj-grid { grid-template-columns: 1fr; } }
+  .obj-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .obj-q { padding: 9px 13px; font-size: 12px; font-weight: 500; color: var(--red); background: rgba(248,113,113,0.05); border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:6px; }
+  .obj-q::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--red); flex-shrink:0; }
+  .obj-a { padding: 12px 13px; font-size: 13px; color: var(--text); line-height: 1.65; }
+  .obj-a strong { color: var(--green); font-weight: 500; }
+
+  /* Close steps */
+  .close-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .close-step { display: flex; align-items: flex-start; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; }
+  .step-n { flex-shrink:0; width:26px; height:26px; border-radius:50%; background:rgba(52,211,153,0.12); color:var(--green); font-family:'DM Mono',monospace; font-size:12px; font-weight:500; display:flex; align-items:center; justify-content:center; }
+  .step-body { font-size: 13px; line-height: 1.65; color: var(--text); }
+  .step-body strong { color: var(--green); font-weight: 500; }
+  .step-quote { display:block; margin-top:8px; padding:10px 13px; border-left:3px solid var(--teal); background:rgba(45,212,191,0.05); border-radius:0 6px 6px 0; font-size:13px; color:#b2f5ea; line-height:1.7; }
+
+  /* Urgency counter */
+  .urgency-bar {
+    background: var(--surface);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .urg-left { font-size: 13px; color: var(--muted); }
+  .urg-left strong { color: var(--amber); font-size: 15px; display: block; }
+  .urg-track { flex:1; min-width:120px; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+  .urg-fill { height:6px; border-radius:3px; background: linear-gradient(90deg, var(--amber), var(--red)); width: 3%; transition: width 1s; }
+  .urg-right { font-size:12px; color: var(--amber); font-family:'DM Mono',monospace; }
+
+  /* Timer bar */
+  .timer-row { display:flex; gap:0; border-radius:8px; overflow:hidden; border:1px solid var(--border); margin-bottom:20px; }
+  .t-seg { flex:1; padding:8px 10px; text-align:center; font-size:11px; font-family:'DM Mono',monospace; }
+  .t-seg span { display:block; }
+  .t-seg .tl { color:var(--muted); font-size:10px; margin-bottom:2px; }
+  .t-seg .tv { color:var(--text); font-weight:500; }
+  .ts1 { background:rgba(79,127,255,0.1); border-right:1px solid var(--border); }
+  .ts2 { background:rgba(45,212,191,0.08); border-right:1px solid var(--border); }
+  .ts3 { background:rgba(245,158,11,0.08); border-right:1px solid var(--border); }
+  .ts4 { background:rgba(248,113,113,0.08); border-right:1px solid var(--border); }
+  .ts5 { background:rgba(52,211,153,0.08); }
+
+  /* Cheat sheet grid */
+  .cheat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+  @media(max-width:560px){ .cheat-grid { grid-template-columns:1fr; } }
+  .cheat-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:11px 13px; font-size:13px; }
+  .cheat-vs { color:var(--muted); font-size:11px; display:block; margin-bottom:3px; font-family:'DM Mono',monospace; }
+  .cheat-line { color:var(--text); }
+
+  hr.div { border:none; border-top:1px solid var(--border); margin:24px 0; }
+
+  /* Page header */
+  .page-header { margin-bottom:32px; }
+  .ph-eyebrow { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .ph-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .page-header h1 { font-size:28px; font-weight:600; letter-spacing:-.02em; }
+  .page-header h1 span { color:var(--accent); }
+  .page-header p { color:var(--muted); font-size:13px; margin-top:6px; }
+
+  /* Tracker styles */
+  .tracker-header { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+  .tracker-stats { display:flex; gap:10px; flex-wrap:wrap; }
+  .tstat { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 16px; min-width:100px; }
+  .tstat-num { font-size:28px; font-weight:600; color:var(--text); display:block; font-family:'DM Mono',monospace; }
+  .tstat-label { font-size:11px; color:var(--muted); margin-top:2px; display:block; }
+  .tracker-progress { flex:1; min-width:220px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .prog-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .prog-label { font-size:12px; color:var(--muted); }
+  .prog-pct { font-size:12px; font-weight:500; font-family:'DM Mono',monospace; }
+  .prog-track { height:8px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden; }
+  .prog-fill { height:8px; border-radius:4px; transition:width .6s ease; }
+  .green-fill { background:linear-gradient(90deg,var(--green),#059669); }
+  .blue-fill { background:linear-gradient(90deg,var(--accent),var(--teal)); }
+
+  /* Counter controls */
+  .counter-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+  .counter-card { flex:1; min-width:140px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+  .counter-label { font-size:11px; color:var(--muted); display:block; margin-bottom:8px; font-family:'DM Mono',monospace; }
+  .counter-controls { display:flex; align-items:center; gap:10px; }
+  .cnt-btn { width:32px; height:32px; border-radius:8px; border:1px solid var(--border2); background:rgba(255,255,255,0.04); color:var(--text); font-size:18px; font-weight:400; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; line-height:1; }
+  .cnt-btn:hover { background:rgba(255,255,255,0.1); }
+  .cnt-plus { border-color:rgba(52,211,153,0.3); color:var(--green); }
+  .cnt-val { font-size:22px; font-weight:600; color:var(--text); font-family:'DM Mono',monospace; min-width:36px; text-align:center; }
+
+  /* Time blocks */
+  .time-block { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:10px; }
+  .time-block-header { display:flex; align-items:center; gap:12px; padding:10px 16px; flex-wrap:wrap; }
+  .tb-blue { background:rgba(79,127,255,0.08); border-bottom:1px solid rgba(79,127,255,0.15); }
+  .tb-teal { background:rgba(45,212,191,0.06); border-bottom:1px solid rgba(45,212,191,0.15); }
+  .tb-amber { background:rgba(245,158,11,0.06); border-bottom:1px solid rgba(245,158,11,0.15); }
+  .tb-purple { background:rgba(167,139,250,0.06); border-bottom:1px solid rgba(167,139,250,0.15); }
+  .tb-green { background:rgba(52,211,153,0.06); border-bottom:1px solid rgba(52,211,153,0.15); }
+  .tb-time { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--muted); flex:0 0 auto; }
+  .tb-name { font-size:13px; font-weight:600; color:var(--text); flex:1; }
+  .tb-target { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; flex:0 0 auto; }
+  .checklist { padding:10px 16px 4px; }
+  .cl-item { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+  .cl-item:last-of-type { border-bottom:none; }
+  .cl-check { flex-shrink:0; width:16px; height:16px; margin-top:2px; accent-color:var(--green); cursor:pointer; }
+  .cl-text { font-size:13px; color:var(--text); line-height:1.5; transition:color .15s; }
+  .cl-item:has(input:checked) .cl-text { color:var(--muted); text-decoration:line-through; }
+  .cl-count { display:inline-block; background:rgba(79,127,255,0.12); color:#93b4ff; border:1px solid rgba(79,127,255,0.2); border-radius:4px; font-size:10px; font-weight:600; padding:1px 6px; margin-right:4px; font-family:'DM Mono',monospace; }
+  .cl-tip { font-size:11px; color:var(--amber); padding:8px 0 10px; font-style:italic; }
+  .reset-btn { font-size:11px; padding:5px 12px; border-radius:6px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .reset-btn:hover { background:rgba(248,113,113,0.08); color:var(--red); border-color:rgba(248,113,113,0.3); }
+
+  /* Pace cards */
+  .pace-card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+  .pace-card-launch { border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.06); }
+  .pace-day { font-size:11px; color:var(--muted); display:block; margin-bottom:3px; font-family:'DM Mono',monospace; }
+  .pace-num { font-size:15px; font-weight:600; color:var(--text); display:block; }
+  .pace-card-launch .pace-num { color:var(--green); }
+  /* 14-Day Plan styles */
+  .plan-phase { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .plan-phase-header { padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .plan-phase-title { font-size:14px; font-weight:600; color:var(--text); }
+  .plan-phase-dates { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; }
+  .plan-day { border-top:1px solid var(--border); }
+  .plan-day-header { display:flex; align-items:center; gap:10px; padding:10px 16px; flex-wrap:wrap; background:rgba(255,255,255,0.01); }
+  .plan-day-num { font-family:'DM Mono',monospace; font-size:12px; font-weight:600; color:var(--text); flex:0 0 52px; }
+  .plan-day-date { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; flex:0 0 80px; }
+  .plan-day-focus { font-size:13px; font-weight:500; color:var(--text); flex:1; }
+  .plan-day-goal { font-size:11px; font-weight:500; padding:3px 10px; border-radius:20px; flex:0 0 auto; }
+  .goal-amber { background:rgba(245,158,11,0.1); color:var(--amber); }
+  .goal-green { background:rgba(52,211,153,0.1); color:var(--green); }
+  .plan-day-tasks { padding:10px 16px 14px 16px; display:flex; flex-direction:column; gap:7px; }
+  .plan-task { display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--text); line-height:1.5; }
+  .pt-dot { flex-shrink:0; width:7px; height:7px; border-radius:50%; margin-top:5px; }
+  .pt-blue { background:var(--accent); }
+  .pt-teal { background:var(--teal); }
+  .pt-green { background:var(--green); }
+  .pt-amber { background:var(--amber); }
+  .pt-purple { background:var(--purple); }
+  .pt-red { background:var(--red); }
+
+  /* Contacts styles */
+  .contact-stats { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cstat { flex:1; min-width:80px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 12px; text-align:center; }
+  .cstat-num { font-size:22px; font-weight:600; color:var(--text); display:block; font-family:'DM Mono',monospace; }
+  .cstat-label { font-size:10px; color:var(--muted); margin-top:2px; display:block; }
+  .add-contact-form { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; }
+  .form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+  .form-field { display:flex; flex-direction:column; gap:5px; }
+  .field-label { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; font-weight:500; }
+  .field-input { background:var(--surface2); border:1px solid var(--border2); border-radius:8px; padding:8px 10px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; transition:border-color .15s; }
+  .field-input:focus { border-color:var(--accent); }
+  .field-input option { background:var(--surface2); }
+  .add-btn { padding:8px 20px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:opacity .15s; }
+  .add-btn:hover { opacity:.85; }
+  .clear-btn { padding:8px 16px; border-radius:8px; border:1px solid var(--border2); background:transparent; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:all .15s; }
+  .clear-btn:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+  .form-toggle-btn { font-size:11px; padding:4px 10px; border-radius:6px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .contact-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+  .export-btn { padding:8px 14px; border-radius:8px; border:1px solid var(--border2); background:transparent; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; white-space:nowrap; transition:all .15s; }
+  .export-btn:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+  .contact-table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:12px; }
+  .contact-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .contact-table th { padding:10px 12px; text-align:left; font-size:11px; font-weight:500; color:var(--muted); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.02); white-space:nowrap; }
+  .contact-table td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+  .contact-table tr:last-child td { border-bottom:none; }
+  .contact-table tr:hover td { background:rgba(255,255,255,0.02); }
+  .status-pill { display:inline-block; font-size:10px; font-weight:500; padding:2px 8px; border-radius:20px; white-space:nowrap; }
+  .s-contacted { background:rgba(124,132,153,0.15); color:var(--muted); }
+  .s-replied { background:rgba(79,127,255,0.12); color:#93b4ff; }
+  .s-demo { background:rgba(245,158,11,0.12); color:var(--amber); }
+  .s-trial { background:rgba(45,212,191,0.12); color:var(--teal); }
+  .s-paid { background:rgba(52,211,153,0.12); color:var(--green); }
+  .s-dead { background:rgba(248,113,113,0.1); color:var(--red); }
+  .contact-table select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:3px 6px; color:var(--text); font-size:12px; font-family:'DM Sans',sans-serif; cursor:pointer; outline:none; }
+  .del-btn { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:0 4px; line-height:1; transition:color .15s; }
+  .del-btn:hover { color:var(--red); }
+  .notes-cell { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-size:12px; }
+  /* ── Follow-up queue ── */
+  .fq-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 15px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px; }
+  .fq-item.overdue { border-color:rgba(248,113,113,0.4); background:rgba(248,113,113,0.04); }
+  .fq-item.today { border-color:rgba(245,158,11,0.4); background:rgba(245,158,11,0.04); }
+  .fq-item.upcoming { border-color:rgba(79,127,255,0.2); }
+  .fq-item.done { opacity:.45; }
+  .fq-check { flex-shrink:0; width:18px; height:18px; margin-top:1px; accent-color:var(--green); cursor:pointer; }
+  .fq-body { flex:1; }
+  .fq-name { font-size:13px; font-weight:500; color:var(--text); }
+  .fq-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+  .fq-note { font-size:12px; color:var(--text); margin-top:5px; font-style:italic; }
+  .fq-date-badge { font-size:11px; font-weight:500; padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0; font-family:'DM Mono',monospace; }
+  .fq-overdue-badge { background:rgba(248,113,113,0.12); color:var(--red); }
+  .fq-today-badge { background:rgba(245,158,11,0.12); color:var(--amber); }
+  .fq-upcoming-badge { background:rgba(79,127,255,0.1); color:#93b4ff; }
+  .fq-done-badge { background:rgba(52,211,153,0.1); color:var(--green); }
+  .fq-del { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:0 2px; flex-shrink:0; transition:color .15s; }
+  .fq-del:hover { color:var(--red); }
+  .fq-empty { text-align:center; color:var(--muted); padding:40px; font-size:13px; }
+
+  /* ── Weekly scorecard ── */
+  .week-tabs { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .week-tab { padding:6px 14px; border-radius:8px; border:1px solid var(--border2); background:transparent; color:var(--muted); font-size:12px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .week-tab.active { background:var(--surface2); color:var(--text); border-color:var(--border2); }
+  .scorecard-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-bottom:16px; }
+  .sc-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 14px; }
+  .sc-label { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; display:block; margin-bottom:6px; }
+  .sc-input { width:100%; background:transparent; border:none; border-bottom:1px solid var(--border2); color:var(--text); font-size:22px; font-weight:600; font-family:'DM Mono',monospace; padding:2px 0 4px; outline:none; }
+  .sc-input:focus { border-bottom-color:var(--accent); }
+  .sc-goal { font-size:11px; color:var(--muted); margin-top:4px; }
+  .sc-goal span { color:var(--text); }
+  .sc-notes-area { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; resize:vertical; min-height:90px; outline:none; box-sizing:border-box; }
+  .sc-notes-area:focus { border-color:var(--accent); }
+  .week-panel { display:none; }
+  .week-panel.active { display:block; }
+
+  /* ── What's working ── */
+  .ww-col-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:600px){ .ww-col-grid { grid-template-columns:1fr; } }
+  .ww-col { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .ww-col-header { padding:10px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .ww-col-title { font-size:13px; font-weight:600; color:var(--text); }
+  .ww-add-btn { font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .ww-add-btn:hover { color:var(--text); background:rgba(255,255,255,0.06); }
+  .ww-items { padding:8px 14px 12px; min-height:60px; }
+  .ww-item { display:flex; align-items:flex-start; gap:8px; padding:7px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--text); }
+  .ww-item:last-child { border-bottom:none; }
+  .ww-rank { flex-shrink:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; font-family:'DM Mono',monospace; margin-top:1px; }
+  .ww-rank-1 { background:rgba(245,158,11,0.2); color:var(--amber); }
+  .ww-rank-2 { background:rgba(124,132,153,0.2); color:var(--muted); }
+  .ww-rank-3 { background:rgba(167,139,250,0.15); color:var(--purple); }
+  .ww-rank-n { background:rgba(255,255,255,0.06); color:var(--muted); }
+  .ww-text { flex:1; line-height:1.45; }
+  .ww-del { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:14px; padding:0; flex-shrink:0; transition:color .15s; }
+  .ww-del:hover { color:var(--red); }
+  .ww-input-row { display:flex; gap:6px; padding:10px 14px; border-top:1px solid var(--border); }
+  .ww-input { flex:1; background:var(--surface2); border:1px solid var(--border2); border-radius:6px; padding:7px 10px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; }
+  .ww-input:focus { border-color:var(--accent); }
+  .ww-submit { padding:7px 14px; border-radius:6px; border:none; background:var(--accent); color:#fff; font-size:12px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+
+  /* ── Demo prep ── */
+  .dp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; margin-bottom:16px; }
+  .dp-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .dp-card-header { padding:10px 14px; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:space-between; }
+  .dp-card-name { font-size:13px; font-weight:600; color:var(--text); }
+  .dp-card-time { font-size:11px; color:var(--amber); font-family:'DM Mono',monospace; }
+  .dp-card-body { padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+  .dp-row { display:flex; gap:8px; align-items:flex-start; }
+  .dp-row-label { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; flex:0 0 80px; padding-top:1px; }
+  .dp-row-val { font-size:13px; color:var(--text); flex:1; }
+  .dp-tier { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; }
+  .dp-tier-starter { background:rgba(124,132,153,0.15); color:var(--muted); }
+  .dp-tier-pro { background:rgba(79,127,255,0.12); color:#93b4ff; }
+  .dp-tier-biz { background:rgba(52,211,153,0.12); color:var(--green); }
+  .dp-card-footer { padding:10px 14px; border-top:1px solid var(--border); display:flex; gap:8px; }
+  .dp-btn { flex:1; padding:7px 0; border-radius:7px; border:1px solid var(--border2); background:transparent; color:var(--muted); font-size:12px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; text-align:center; }
+  .dp-btn:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+  .dp-btn-primary { border-color:rgba(79,127,255,0.3); color:var(--accent); }
+  .dp-btn-primary:hover { background:rgba(79,127,255,0.1); }
+  .dp-empty { text-align:center; color:var(--muted); padding:40px; font-size:13px; }
+
+  /* ── Daily debrief (inside tracker) ── */
+  .debrief-day { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:8px; }
+  .debrief-day-header { padding:9px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.02); cursor:pointer; }
+  .debrief-day-label { font-size:12px; font-weight:500; color:var(--text); font-family:'DM Mono',monospace; }
+  .debrief-day-meta { font-size:11px; color:var(--muted); }
+  .debrief-body { padding:12px 14px; display:none; }
+  .debrief-body.open { display:block; }
+  .debrief-textarea { width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:8px; padding:10px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; resize:vertical; min-height:80px; outline:none; box-sizing:border-box; }
+  .debrief-textarea:focus { border-color:var(--accent); }
+  .debrief-save { margin-top:8px; padding:6px 16px; border-radius:6px; border:none; background:var(--accent); color:#fff; font-size:12px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .debrief-saved { color:var(--green); font-size:11px; margin-left:8px; opacity:0; transition:opacity .3s; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>OneServ · Launch Messaging Kit</div>
+    <h1>Plumber-First <span>Launch Pack</span></h1>
+    <p>Demo script · Facebook posts · DM outreach · Landing copy · Objection handlers · Close scripts</p>
+  </div>
+
+  <!-- Urgency Bar -->
+  <div class="urgency-bar">
+    <div class="urg-left">
+      <strong>Pricebook offer — first 100 users only</strong>
+      Pro & Business tiers · Full plumbing pricebook included free
+    </div>
+    <div class="urg-track"><div class="urg-fill" id="urgFill"></div></div>
+    <div class="urg-right">3 / 100 claimed</div>
+  </div>
+
+  <!-- Tab Nav -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('tracker')">Daily Tracker</button>
+    <button class="tab-btn" onclick="showTab('plan')">14-Day Plan</button>
+    <button class="tab-btn" onclick="showTab('contacts')">Contacts</button>
+    <button class="tab-btn" onclick="showTab('followups')">Follow-Up Queue</button>
+    <button class="tab-btn" onclick="showTab('scorecard')">Scorecard</button>
+    <button class="tab-btn" onclick="showTab('working')">What's Working</button>
+    <button class="tab-btn" onclick="showTab('demoprep')">Demo Prep</button>
+    <button class="tab-btn" onclick="showTab('demo')">Demo Script</button>
+    <button class="tab-btn" onclick="showTab('fb')">Facebook Posts</button>
+    <button class="tab-btn" onclick="showTab('dm')">DM Outreach</button>
+    <button class="tab-btn" onclick="showTab('texts')">Texts</button>
+    <button class="tab-btn" onclick="showTab('landing')">Landing Copy</button>
+    <button class="tab-btn" onclick="showTab('followup')">Follow-Up Emails</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════ DAILY TRACKER ═══ -->
+  <div class="panel active" id="panel-tracker">
+    <div class="sec-head">
+      <span class="sec-badge badge-green">Daily Tracker</span>
+      <span class="sec-title">Your 100-Touch War Room</span>
+    </div>
+    <p class="sec-desc">Check off every task as you go. Hit 100 touches/day = 400 signups in 14 days. Reset resets today's checkboxes only — your signup count stays.</p>
+
+    <!-- Signup counter -->
+    <div class="tracker-header">
+      <div class="tracker-stats">
+        <div class="tstat">
+          <span class="tstat-num" id="signupCount">0</span>
+          <span class="tstat-label">Total signups</span>
+        </div>
+        <div class="tstat">
+          <span class="tstat-num" id="touchCount">0</span>
+          <span class="tstat-label">Touches today</span>
+        </div>
+        <div class="tstat">
+          <span class="tstat-num" id="demoCount">0</span>
+          <span class="tstat-label">Demos run</span>
+        </div>
+        <div class="tstat">
+          <span class="tstat-num" id="paidCount">0</span>
+          <span class="tstat-label">Paid users</span>
+        </div>
+      </div>
+      <div class="tracker-progress">
+        <div class="prog-row">
+          <span class="prog-label">Signup goal: 400</span>
+          <span class="prog-pct" id="signupPct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill green-fill" id="signupBar" style="width:0%"></div></div>
+        <div class="prog-row" style="margin-top:10px;">
+          <span class="prog-label">Today's touches: 100</span>
+          <span class="prog-pct" id="touchPct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill blue-fill" id="touchBar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Counter controls -->
+    <div class="counter-row">
+      <div class="counter-card">
+        <span class="counter-label">Add signups</span>
+        <div class="counter-controls">
+          <button class="cnt-btn" onclick="adjust('signup',-1)">−</button>
+          <span class="cnt-val" id="signupVal">0</span>
+          <button class="cnt-btn cnt-plus" onclick="adjust('signup',1)">+</button>
+        </div>
+      </div>
+      <div class="counter-card">
+        <span class="counter-label">Add demos run</span>
+        <div class="counter-controls">
+          <button class="cnt-btn" onclick="adjust('demo',-1)">−</button>
+          <span class="cnt-val" id="demoVal">0</span>
+          <button class="cnt-btn cnt-plus" onclick="adjust('demo',1)">+</button>
+        </div>
+      </div>
+      <div class="counter-card">
+        <span class="counter-label">Add paid users</span>
+        <div class="counter-controls">
+          <button class="cnt-btn" onclick="adjust('paid',-1)">−</button>
+          <span class="cnt-val" id="paidVal">0</span>
+          <button class="cnt-btn cnt-plus" onclick="adjust('paid',1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time blocks -->
+    <div style="margin: 24px 0 12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <span style="font-size:13px;font-weight:600;color:var(--text);">Daily Checklist — Best Times</span>
+        <button class="reset-btn" onclick="resetDay()">Reset today</button>
+      </div>
+
+      <!-- Block 1 -->
+      <div class="time-block">
+        <div class="time-block-header tb-blue">
+          <span class="tb-time">7:00 – 8:00 AM</span>
+          <span class="tb-name">Cold DM Blitz</span>
+          <span class="tb-target">Target: 50–60 DMs</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="15" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">15</span> Cold DMs — Facebook / Instagram (plumbing company owners from Google Maps)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="15" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">15</span> Cold DMs — Facebook plumbing group members who commented on posts</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="10" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">10</span> Cold texts to owner numbers from Google Maps listings</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="10" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">10</span> Friend texts — opener sequence (what dispatch system are you using?)</span></label>
+          <div class="cl-tip">Best time for DMs — plumbing owners check phones before their first job of the day</div>
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="time-block">
+        <div class="time-block-header tb-teal">
+          <span class="tb-time">8:00 – 9:00 AM</span>
+          <span class="tb-name">Facebook Group Posts</span>
+          <span class="tb-target">Target: 3–5 posts</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Post in Plumbing Business Owners group (rotate post variations)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Post in HVAC Business Owners Network</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Post in Field Service Business Owners group</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Post in Trade Contractor Mastermind / Home Service Business Owners</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Drop link in comments of yesterday's posts that got engagement</span></label>
+          <div class="cl-tip">Never post same copy twice in same group. Use a different variation each day from the Facebook Posts tab.</div>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="time-block">
+        <div class="time-block-header tb-amber">
+          <span class="tb-time">9:00 – 10:00 AM</span>
+          <span class="tb-name">LinkedIn + Reddit + Nextdoor</span>
+          <span class="tb-target">Target: 3–4 posts</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> LinkedIn post (founder story, pain point, or feature highlight — rotate daily)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Reddit post — r/Plumbing or r/HVAC (story format, link in comments only)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Nextdoor post as Trusted Plumbing &amp; Water Heaters</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Engage / reply to comments on yesterday's LinkedIn + Reddit posts</span></label>
+          <div class="cl-tip">LinkedIn posts compound — earlier in the day = more feed time before the algorithm buries it.</div>
+        </div>
+      </div>
+
+      <!-- Block 4 -->
+      <div class="time-block">
+        <div class="time-block-header tb-purple">
+          <span class="tb-time">10:00 AM – 12:00 PM</span>
+          <span class="tb-name">Demo Calls + Onboarding</span>
+          <span class="tb-target">Target: 2–4 demos</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Run booked demo — walk through full script, close on the call</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Run booked demo #2</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Onboard any yes's from demos — open oneserv.app together, get first job type entered</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Send same-day follow-up text/email to anyone who didn't close on the call</span></label>
+          <div class="cl-tip">10am–noon is the best demo window for trades owners — after morning dispatch, before lunch runs.</div>
+        </div>
+      </div>
+
+      <!-- Block 5 -->
+      <div class="time-block">
+        <div class="time-block-header tb-blue">
+          <span class="tb-time">12:00 – 1:00 PM</span>
+          <span class="tb-name">Warm Lead Follow-Ups</span>
+          <span class="tb-target">Target: 15–20 follow-ups</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="8" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">8</span> Follow up on DMs that got a reply but haven't booked a demo yet</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Follow up on friend texts that replied — move to reveal text #2</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Day 3 follow-up emails to leads who signed up but haven't upgraded</span></label>
+          <div class="cl-tip">Lunch hour — owners are between jobs and more likely to read and respond to messages.</div>
+        </div>
+      </div>
+
+      <!-- Block 6 -->
+      <div class="time-block">
+        <div class="time-block-header tb-teal">
+          <span class="tb-time">1:00 – 3:00 PM</span>
+          <span class="tb-name">Afternoon Demos + Supply House Outreach</span>
+          <span class="tb-target">Target: 2 demos + 2 calls</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Run afternoon demo #1</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Run afternoon demo #2</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Call Ferguson / Hajoca / local supply house — ask to share with their contractor list</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Reach out to PHCC Arizona or local trade association</span></label>
+          <div class="cl-tip">One supply house partnership = 200+ warm impressions instantly. Worth 30 minutes of calls.</div>
+        </div>
+      </div>
+
+      <!-- Block 7 -->
+      <div class="time-block">
+        <div class="time-block-header tb-amber">
+          <span class="tb-time">3:00 – 4:00 PM</span>
+          <span class="tb-name">Engage All Channels</span>
+          <span class="tb-target">Target: 10–15 replies</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Reply to every Facebook group comment from today's posts</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="3" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">3</span> Reply to LinkedIn comments — engage everyone who interacted</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="3" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">3</span> DM anyone who liked or commented on a post but didn't reach out</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="4" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">4</span> Send 10 more cold DMs from today's Google Maps research list</span></label>
+          <div class="cl-tip">3–4pm is when Facebook group engagement peaks — owners wrapping afternoon jobs, checking phones.</div>
+        </div>
+      </div>
+
+      <!-- Block 8 -->
+      <div class="time-block">
+        <div class="time-block-header tb-purple">
+          <span class="tb-time">4:00 – 5:00 PM</span>
+          <span class="tb-name">Content + Referrals</span>
+          <span class="tb-target">Target: 1 video + 5 referral asks</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="1" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">1</span> Record short TikTok / Reel — before/after of a real dispatch scenario (60 sec, raw)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Ask today's new signups: "Know another plumber who'd want this?" — referral text</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Update signup counter on landing page with current real number</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Prep tomorrow's Facebook post copy (rotate to next variation)</span></label>
+          <div class="cl-tip">Referral ask right after signup = highest conversion moment. They're excited. Strike while it's hot.</div>
+        </div>
+      </div>
+
+      <!-- Block 9 -->
+      <div class="time-block">
+        <div class="time-block-header tb-green">
+          <span class="tb-time">5:00 – 6:00 PM</span>
+          <span class="tb-name">End of Day Wind-Down</span>
+          <span class="tb-target">Final push + review</span>
+        </div>
+        <div class="checklist">
+          <label class="cl-item"><input type="checkbox" class="cl-check touch-check" data-touches="5" onchange="updateTouches()"><span class="cl-text"><span class="cl-count">5</span> Final batch of cold DMs — evening check is high open-rate time for owners</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Log today's numbers in the counters above (signups, demos, paid)</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Check: did you hit 100 touches today? If not, send 10 more DMs before bed</span></label>
+          <label class="cl-item"><input type="checkbox" class="cl-check" onchange="updateTouches()"><span class="cl-text">Book any unbooked follow-up demos for tomorrow's calendar</span></label>
+          <div class="cl-tip">5–7pm is peak engagement time for social posts. Re-share any post that got early traction.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Daily pace guide -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:8px;">
+      <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
+        <span style="font-size:12px;font-weight:500;color:var(--muted);font-family:'DM Mono',monospace;">14-day pace guide — are you on track?</span>
+      </div>
+      <div style="padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;">
+        <div class="pace-card"><span class="pace-day">End of Day 3</span><span class="pace-num">60–75 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 5</span><span class="pace-num">100–125 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 7</span><span class="pace-num">150–175 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 10</span><span class="pace-num">225–260 signups</span></div>
+        <div class="pace-card"><span class="pace-day">End of Day 12</span><span class="pace-num">300–340 signups</span></div>
+        <div class="pace-card pace-card-launch"><span class="pace-day">Launch Day 14</span><span class="pace-num">400 signups</span></div>
+      </div>
+    </div>
+
+    <!-- Daily Debrief -->
+    <div style="margin-top:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span style="font-size:13px;font-weight:600;color:var(--text);">End-of-Day Debrief</span>
+        <span style="font-size:11px;color:var(--muted);">Click a day to expand and write your notes</span>
+      </div>
+      <div id="debriefList"></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ FOLLOW-UP QUEUE ═══ -->
+  <div class="panel" id="panel-followups">
+    <div class="sec-head">
+      <span class="sec-badge badge-red">Follow-Up Queue</span>
+      <span class="sec-title">Never Let a Warm Lead Die</span>
+    </div>
+    <p class="sec-desc">Add anyone who said "check back with me" or needs a nudge. Overdue items show in red. Today's items show in amber. Check them off when done.</p>
+
+    <div class="tip tip-amber" id="overdueAlert" style="display:none;margin-bottom:14px;"><strong id="overdueMsg"></strong></div>
+
+    <!-- Add follow-up form -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;">Schedule a follow-up</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:12px;">
+        <div class="form-field"><label class="field-label">Name *</label><input type="text" id="fqName" placeholder="Mike — Smith Plumbing" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Follow-up date *</label><input type="date" id="fqDate" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Channel / context</label><input type="text" id="fqContext" placeholder="Facebook DM · on HCP til June" class="field-input"></div>
+        <div class="form-field" style="grid-column:1/-1;"><label class="field-label">What to say / do</label><input type="text" id="fqNote" placeholder="Send Day 3 follow-up email. Mention pricebook counter." class="field-input"></div>
+      </div>
+      <button class="add-btn" onclick="addFollowUp()">Add to Queue</button>
+    </div>
+
+    <!-- Filter tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+      <button class="week-tab active" onclick="setFqFilter('all',this)">All</button>
+      <button class="week-tab" onclick="setFqFilter('overdue',this)">Overdue</button>
+      <button class="week-tab" onclick="setFqFilter('today',this)">Today</button>
+      <button class="week-tab" onclick="setFqFilter('upcoming',this)">Upcoming</button>
+      <button class="week-tab" onclick="setFqFilter('done',this)">Done</button>
+    </div>
+
+    <div id="fqList"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ SCORECARD ═══ -->
+  <div class="panel" id="panel-scorecard">
+    <div class="sec-head">
+      <span class="sec-badge badge-green">Weekly Scorecard</span>
+      <span class="sec-title">Are You on Pace?</span>
+    </div>
+    <p class="sec-desc">Log your numbers at the end of each week. Green means ahead of pace. Red means you need to push harder next week. All data saves in your browser.</p>
+
+    <div class="week-tabs" id="weekTabs"></div>
+    <div id="weekPanels"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ WHAT'S WORKING ═══ -->
+  <div class="panel" id="panel-working">
+    <div class="sec-head">
+      <span class="sec-badge badge-amber">What's Working</span>
+      <span class="sec-title">Your Live Performance Board</span>
+    </div>
+    <p class="sec-desc">Rank what's driving signups. Update it every 2–3 days. Double down on #1, drop what's at the bottom. This is how you stop spreading effort evenly when 20% of channels drive 80% of results.</p>
+
+    <div class="ww-col-grid">
+      <div class="ww-col">
+        <div class="ww-col-header"><span class="ww-col-title">Top channels</span><button class="ww-add-btn" onclick="showWwInput('channels')">+ Add</button></div>
+        <div class="ww-items" id="ww-channels-list"></div>
+        <div class="ww-input-row" id="ww-channels-input" style="display:none;">
+          <input type="text" class="ww-input" id="ww-channels-text" placeholder="e.g. Plumbing Business Owners FB group" onkeydown="if(event.key==='Enter')addWwItem('channels')">
+          <button class="ww-submit" onclick="addWwItem('channels')">Add</button>
+        </div>
+      </div>
+      <div class="ww-col">
+        <div class="ww-col-header"><span class="ww-col-title">Best post variations</span><button class="ww-add-btn" onclick="showWwInput('posts')">+ Add</button></div>
+        <div class="ww-items" id="ww-posts-list"></div>
+        <div class="ww-input-row" id="ww-posts-input" style="display:none;">
+          <input type="text" class="ww-input" id="ww-posts-text" placeholder="e.g. Origin story post — 18 signups Day 2" onkeydown="if(event.key==='Enter')addWwItem('posts')">
+          <button class="ww-submit" onclick="addWwItem('posts')">Add</button>
+        </div>
+      </div>
+      <div class="ww-col">
+        <div class="ww-col-header"><span class="ww-col-title">Best DM / text openers</span><button class="ww-add-btn" onclick="showWwInput('dms')">+ Add</button></div>
+        <div class="ww-items" id="ww-dms-list"></div>
+        <div class="ww-input-row" id="ww-dms-input" style="display:none;">
+          <input type="text" class="ww-input" id="ww-dms-text" placeholder="e.g. Cold text #1 — 12% reply rate" onkeydown="if(event.key==='Enter')addWwItem('dms')">
+          <button class="ww-submit" onclick="addWwItem('dms')">Add</button>
+        </div>
+      </div>
+      <div class="ww-col">
+        <div class="ww-col-header"><span class="ww-col-title">What's NOT working</span><button class="ww-add-btn" onclick="showWwInput('notworking')">+ Add</button></div>
+        <div class="ww-items" id="ww-notworking-list"></div>
+        <div class="ww-input-row" id="ww-notworking-input" style="display:none;">
+          <input type="text" class="ww-input" id="ww-notworking-text" placeholder="e.g. Reddit r/HVAC — zero traction" onkeydown="if(event.key==='Enter')addWwItem('notworking')">
+          <button class="ww-submit" onclick="addWwItem('notworking')">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ DEMO PREP ═══ -->
+  <div class="panel" id="panel-demoprep">
+    <div class="sec-head">
+      <span class="sec-badge badge-blue">Demo Prep</span>
+      <span class="sec-title">Pre-Call Briefing Cards</span>
+    </div>
+    <p class="sec-desc">Add a card before every demo. Pull it up 2 minutes before the call. Know their software, pain point, and right tier before you say hello. Pulls from your Contacts automatically if matched.</p>
+
+    <!-- Add demo prep form -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;">Add demo prep card</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:12px;">
+        <div class="form-field"><label class="field-label">Name *</label><input type="text" id="dpName" placeholder="Mike Johnson" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Company</label><input type="text" id="dpCompany" placeholder="Johnson Plumbing" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Demo date &amp; time</label><input type="datetime-local" id="dpTime" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Current software</label>
+          <select id="dpSoftware" class="field-input">
+            <option value="">Unknown</option>
+            <option>HouseCall Pro</option>
+            <option>ServiceTitan</option>
+            <option>Jobber</option>
+            <option>Paper / spreadsheets</option>
+            <option>Nothing</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field"><label class="field-label">Number of techs</label><input type="text" id="dpTechs" placeholder="3 techs" class="field-input"></div>
+        <div class="form-field"><label class="field-label">Likely tier</label>
+          <select id="dpTier" class="field-input">
+            <option value="starter">Starter — $79 (solo)</option>
+            <option value="pro">Pro — $149 (2–5 techs)</option>
+            <option value="biz">Business — $249 (6–10 techs)</option>
+          </select>
+        </div>
+        <div class="form-field" style="grid-column:1/-1;"><label class="field-label">Main pain point / what to lead with</label><input type="text" id="dpPain" placeholder="Fed up with HCP add-ons. Hates the invoice process. Lead with 5-step invoice." class="field-input"></div>
+        <div class="form-field"><label class="field-label">Phone</label><input type="text" id="dpPhone" placeholder="602-555-0100" class="field-input"></div>
+      </div>
+      <button class="add-btn" onclick="addDemoPrep()">Add Prep Card</button>
+    </div>
+
+    <div id="dpList"><p class="dp-empty">No demo prep cards yet. Add one before your next call.</p></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ TEXTS ═══ -->
+  <div class="panel" id="panel-texts">
+    <div class="sec-head">
+      <span class="sec-badge badge-teal">Text Scripts</span>
+      <span class="sec-title">Friend Texts + Cold Texts</span>
+    </div>
+    <p class="sec-desc">Two types: friend texts for people you know (3-text sequence), and cold texts for numbers pulled from Google Maps listings. Both are conversational — never paste-and-blast sounding.</p>
+
+    <!-- Friend Texts -->
+    <div style="margin-bottom:8px;">
+      <span style="font-size:12px;font-weight:600;color:var(--green);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;">Friend Sequence — 3 texts</span>
+    </div>
+    <div class="tip tip-green" style="margin-bottom:16px;"><strong>Send separately, not in a group text.</strong> Personal message to each person gets a much higher response and makes it feel genuine. Send each text only after you get a reply to the previous one.</div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">text 1 · the opener — send today, no pitch</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey bro, curious — what dispatch system are you using these days? And how many techs are you running now?</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">text 2 · the reveal — after they reply</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Dude I had to ask because I actually built one. Been working on it for a while now — finally launching April 14th. It's called OneServ. Built it because I was so fed up with HouseCall Pro nickel and diming me on every little thing. Would love for you to be one of the first to try it — I'll set you up free, Pro level, full access. Includes the actual pricebook I use at Trusted Plumbing. Just need your honest opinion. If it sucks tell me, if you like it a review would mean everything right now.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">text 3 · the onboard — after they say yes</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">I'll set you up right now. Takes like 10 minutes to get going. I'll walk you through it personally — just let me know when you have a few minutes and I'll call you.</div>
+    </div>
+
+    <div style="height:1px;background:var(--border);margin:24px 0;"></div>
+
+    <!-- Cold Texts -->
+    <div style="margin-bottom:8px;">
+      <span style="font-size:12px;font-weight:600;color:var(--accent);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;">Cold Texts — Google Maps owners</span>
+    </div>
+    <div class="tip tip-blue" style="margin-bottom:16px;"><strong>Where to find numbers:</strong> Google Maps → search "plumbing company [city]" → open each listing → grab the phone number. Phoenix, Scottsdale, Mesa, Tempe, Chandler, Gilbert, Peoria. Target owner-operator listings (1–5 reviews, small company feel). Do 10 numbers per city = 70 cold texts/week from AZ alone, then expand nationally.</div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold text #1 · short opener (best response rate)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — Dutch Conners here, I own Trusted Plumbing in Arizona. Built a dispatch app called OneServ specifically for plumbing companies — launching April 14th. First 100 plumbers at Pro level get my complete plumbing pricebook free (the one I actually use). Worth a quick look? Happy to show you in 10 minutes.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold text #2 · the pain angle</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — Dutch from Trusted Plumbing in AZ. Quick question — are you on HouseCall Pro or ServiceTitan? I built my own dispatch app because I got tired of the add-on fees. Launching April 14th — first 100 plumbers get my full pricebook free. 10 min demo if you want to see it.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold text #3 · ultra short (for when you're in volume mode)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — plumber to plumber. I built a dispatch app called OneServ — no add-ons, one flat price. Launching April 14. First 100 get my plumbing pricebook free. Want to see it?</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold text follow-up · if no reply after 2 days</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — just following up quick. Down to the last few spots on the free pricebook offer. Didn't want you to miss it if you were interested. No pressure either way.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">reply handler · "what does it cost?"</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Starter is $79/mo (solo), Pro $149 (up to 5 techs), Business $249 (up to 10). No add-ons — everything included. HouseCall Pro runs $149–$349 before add-ons. Pro and Business include my full plumbing pricebook free right now, first 100 only. Want me to walk you through it real quick?</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">reply handler · "i'm already on hcp / servicetitan"</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">That's exactly who I built it for honestly. How long you got left on your contract? I'll set you up free now so you can run both. When your contract is up you'll already know OneServ cold — and you'd still get the pricebook while the offer's open.</div>
+    </div>
+
+    <div class="tip tip-amber"><strong>Text timing matters.</strong> Best windows: 7–8am (before first job), 12–1pm (lunch break), 5–7pm (after last job). Avoid 9–11am and 2–4pm — they're in the field.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ 14-DAY PLAN ═══ -->
+  <div class="panel" id="panel-plan">
+    <div class="sec-head">
+      <span class="sec-badge badge-amber">14-Day Plan</span>
+      <span class="sec-title">Mar 27 → Apr 14 · Day by Day</span>
+    </div>
+    <p class="sec-desc">Your complete day-by-day roadmap from today to launch. Each day has a single primary focus and specific tasks. Treat this as your operating plan — not a suggestion.</p>
+
+    <div class="plan-phase">
+      <div class="plan-phase-header" style="background:rgba(79,127,255,0.08);border-bottom:1px solid rgba(79,127,255,0.15);">
+        <span class="plan-phase-title">Phase 1 — Ignition</span>
+        <span class="plan-phase-dates">Mar 27–30 · Days 1–4 · Build the base</span>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Day 1</span>
+          <span class="plan-day-date">Thu Mar 27</span>
+          <span class="plan-day-focus">Group infiltration + groundwork</span>
+          <span class="plan-day-goal goal-amber">Target: 10–15 signups</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Join 20+ Facebook trade groups (plumbing, HVAC, electrical) — don't post yet, just get approved. Most take 24–48hrs.</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Submit OneServ to BetaList (free — they email their newsletter before launch)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Record founder story video — iPhone, 5 min, raw. "I'm a plumber, I built this." Post to YouTube.</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>DM 30 contractors from Google Maps — Phoenix, Scottsdale search "plumbing company"</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Send friend texts — opener sequence to 5–10 plumber friends (Text 1 only)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Verify landing page + waitlist is live, pricebook offer copy is showing, signup counter is set</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Day 2</span>
+          <span class="plan-day-date">Fri Mar 28</span>
+          <span class="plan-day-focus">First posts go live</span>
+          <span class="plan-day-goal goal-amber">Target: 20–25 signups</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>First Facebook group posts in all approved groups — use Post Variation #1 (origin story)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>LinkedIn founder story post #1 — share YouTube video link</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>DM 30 more contractors from Google Maps (Mesa, Tempe, Chandler)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Call 3 supply houses — Ferguson, Hajoca, local AZ plumbing supply. Ask to share with contractor customers.</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Send friend Text 2 (the reveal) to anyone who replied to Text 1 yesterday</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Set up Calendly if not already done — 30-min demo slots, 10-min follow-up slots</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Day 3</span>
+          <span class="plan-day-date">Sat Mar 29</span>
+          <span class="plan-day-focus">Volume outreach day</span>
+          <span class="plan-day-goal goal-amber">Target: 25–30 signups</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Post in next batch of Facebook groups — use Post Variation #2 (pain post)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>DM 50 contractors — highest volume day. Gilbert, Peoria, Glendale, Surprise AZ.</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>First demo calls — run everyone who booked from Days 1–2</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Reddit post in r/Plumbing — founder story format, link in comments only</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Nextdoor post as Trusted Plumbing & Water Heaters</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Follow up Day 1 DMs that haven't replied — one more touch</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Day 4</span>
+          <span class="plan-day-date">Sun Mar 30</span>
+          <span class="plan-day-focus">Engage + follow up everything</span>
+          <span class="plan-day-goal goal-amber">Target: 20–25 signups</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Reply to every Facebook group comment from Days 2–3 posts — this boosts algorithm reach</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Follow up all warm DMs — anyone who replied but hasn't booked a demo</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>LinkedIn post #2 — pain point story ("what a bad dispatch day cost me")</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Run Sunday demos — some owners have more time on weekends</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Reddit r/HVAC post — same founder story, slightly different angle</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Check pace: should be at 75–95 signups by end of Day 4</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan-phase" style="margin-top:12px;">
+      <div class="plan-phase-header" style="background:rgba(52,211,153,0.07);border-bottom:1px solid rgba(52,211,153,0.15);">
+        <span class="plan-phase-title">Phase 2 — Acceleration</span>
+        <span class="plan-phase-dates">Mar 31–Apr 7 · Days 5–12 · Push hard</span>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Days 5–7</span>
+          <span class="plan-day-date">Mar 31–Apr 2</span>
+          <span class="plan-day-focus">Referral engine + full daily rhythm</span>
+          <span class="plan-day-goal goal-green">Target: 25–35/day</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Ask every new signup: "Know another plumber who'd want this?" — referral text from Texts tab</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Re-post in Facebook groups that got engagement — new variation each time (Post #3 pricebook hook)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>LinkedIn posts #3–4 — feature highlight, then a "5 steps to close an invoice" demo post</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Run 3–5 demos per day — this is your peak demo volume window</span></div>
+          <div class="plan-task"><span class="pt-dot pt-green"></span><span>Expand DM outreach nationally — Tucson, Las Vegas, Albuquerque, Denver plumbing companies</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Pace check end of Day 7: should be at 175–210 signups</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Days 8–10</span>
+          <span class="plan-day-date">Apr 3–5</span>
+          <span class="plan-day-focus">Content push + Product Hunt prep</span>
+          <span class="plan-day-goal goal-green">Target: 25–30/day</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Post short before/after TikTok/Reel from Trusted Plumbing — real job dispatch scenario</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Share TikTok/Reel in all Facebook groups as new content (fresh post = fresh reach)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>LinkedIn posts #5–7 — competitor comparison post, founder journey, "what plumbers told me" post</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Set up Product Hunt page — write description, upload screenshots, queue for Apr 14 launch</span></div>
+          <div class="plan-task"><span class="pt-dot pt-blue"></span><span>Follow up all warm leads from Week 1 that haven't converted — Day 7 last-touch email</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Pace check end of Day 10: should be at 275–310 signups</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Days 11–12</span>
+          <span class="plan-day-date">Apr 6–7</span>
+          <span class="plan-day-focus">Pre-launch urgency push</span>
+          <span class="plan-day-goal goal-green">Target: 30–40/day</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>"2 days until launch" posts across all channels — use Post Variation #5 (urgency post)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Email your full waitlist — subject: "We launch Monday. Your pricebook spot is still open."</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Personal call/text to the 10 warmest leads who haven't converted yet</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>PHCC Arizona outreach — call or email the association, ask to share with members</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Run every booked demo — close hard, use the urgency ("pricebook offer closes at launch")</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Submit to Product Hunt for April 14 launch (must be submitted 24hrs before go-live)</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>Pace check end of Day 12: should be at 340–390 signups</span></div>
+        </div>
+      </div>
+
+      <div class="plan-day">
+        <div class="plan-day-header">
+          <span class="plan-day-num">Days 13</span>
+          <span class="plan-day-date">Apr 8–13</span>
+          <span class="plan-day-focus">Final countdown — every channel hot</span>
+          <span class="plan-day-goal goal-green">Target: stay on pace</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Daily posts across all Facebook groups — rotate remaining variations, re-engage commenters</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Continue 50+ DMs/day — expand to national markets: Dallas, Houston, Chicago, Atlanta</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Run daily demos 10am–noon and 1–3pm blocks</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Referral asks to every existing signup — "launch is Monday, who else should know?"</span></div>
+          <div class="plan-task"><span class="pt-dot pt-purple"></span><span>Update signup counter on landing page daily — keep urgency real and visible</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan-phase" style="margin-top:12px;">
+      <div class="plan-phase-header" style="background:rgba(245,158,11,0.08);border-bottom:1px solid rgba(245,158,11,0.2);">
+        <span class="plan-phase-title">Phase 3 — Launch Day</span>
+        <span class="plan-phase-dates">Apr 14 · Day 14 · All hands on deck</span>
+      </div>
+
+      <div class="plan-day" style="border-bottom:none;">
+        <div class="plan-day-header" style="background:rgba(245,158,11,0.06);">
+          <span class="plan-day-num" style="color:var(--amber);">Day 14</span>
+          <span class="plan-day-date">Mon Apr 14</span>
+          <span class="plan-day-focus">Launch day blitz</span>
+          <span class="plan-day-goal" style="background:rgba(245,158,11,0.15);color:var(--amber);">Target: 40–60 signups</span>
+        </div>
+        <div class="plan-day-tasks">
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>7:00am — Email entire waitlist: subject "We're live. Your pricebook is waiting."</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>7:30am — "We're LIVE" posts across every Facebook group simultaneously</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>8:00am — Product Hunt goes live — ask your network to upvote</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Post launch announcement on LinkedIn, Reddit r/Plumbing, Nextdoor</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Personal text to every warm lead: "We're live today — your spot is still open"</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Run 6–8 demos today — close everyone personally, onboard during the call</span></div>
+          <div class="plan-task"><span class="pt-dot pt-amber"></span><span>Upgrade every trial to paid personally — call or text each one</span></div>
+          <div class="plan-task"><span class="pt-dot pt-teal"></span><span>End of day goal: 400 total signups · 100 paid users · pricebook delivered to all Pro/Business</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ CONTACTS ═══ -->
+  <div class="panel" id="panel-contacts">
+    <div class="sec-head">
+      <span class="sec-badge badge-purple">Contacts</span>
+      <span class="sec-title">Lead Tracker</span>
+    </div>
+    <p class="sec-desc">Log every person you reach out to. Track their status, what channel they came from, and your next action. Data saves in your browser automatically.</p>
+
+    <!-- Stats bar -->
+    <div class="contact-stats">
+      <div class="cstat"><span class="cstat-num" id="cTotal">0</span><span class="cstat-label">Total contacts</span></div>
+      <div class="cstat" style="border-color:rgba(79,127,255,0.2);"><span class="cstat-num" style="color:var(--accent);" id="cContacted">0</span><span class="cstat-label">Contacted</span></div>
+      <div class="cstat" style="border-color:rgba(245,158,11,0.2);"><span class="cstat-num" style="color:var(--amber);" id="cDemo">0</span><span class="cstat-label">Demo booked</span></div>
+      <div class="cstat" style="border-color:rgba(45,212,191,0.2);"><span class="cstat-num" style="color:var(--teal);" id="cTrial">0</span><span class="cstat-label">Trial signup</span></div>
+      <div class="cstat" style="border-color:rgba(52,211,153,0.3);"><span class="cstat-num" style="color:var(--green);" id="cPaidStat">0</span><span class="cstat-label">Paid</span></div>
+      <div class="cstat" style="border-color:rgba(248,113,113,0.2);"><span class="cstat-num" style="color:var(--red);" id="cDead">0</span><span class="cstat-label">No interest</span></div>
+    </div>
+
+    <!-- Add contact form -->
+    <div class="add-contact-form" id="addForm">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+        <span>Add new contact</span>
+        <button class="form-toggle-btn" onclick="toggleForm()">− Collapse</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="field-label">Name *</label>
+          <input type="text" id="fName" placeholder="John Smith" class="field-input">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Company</label>
+          <input type="text" id="fCompany" placeholder="Smith Plumbing" class="field-input">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Phone / Contact</label>
+          <input type="text" id="fPhone" placeholder="602-555-0100" class="field-input">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Channel</label>
+          <select id="fChannel" class="field-input">
+            <option value="">Select channel</option>
+            <option>Facebook Group</option>
+            <option>Facebook DM</option>
+            <option>Cold Text</option>
+            <option>Friend Text</option>
+            <option>LinkedIn</option>
+            <option>Reddit</option>
+            <option>Nextdoor</option>
+            <option>Supply House Referral</option>
+            <option>Google Maps outreach</option>
+            <option>Demo Inbound</option>
+            <option>Referral from user</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Status</label>
+          <select id="fStatus" class="field-input">
+            <option value="contacted">Contacted</option>
+            <option value="replied">Replied</option>
+            <option value="demo">Demo booked</option>
+            <option value="trial">Trial signup</option>
+            <option value="paid">Paid user</option>
+            <option value="dead">No interest</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Techs / Size</label>
+          <input type="text" id="fSize" placeholder="Solo / 3 techs / 8 techs" class="field-input">
+        </div>
+        <div class="form-field" style="grid-column:1/-1;">
+          <label class="field-label">Notes</label>
+          <input type="text" id="fNotes" placeholder="On HCP contract until June. Interested in pricebook. Follow up Thu." class="field-input">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button class="add-btn" onclick="addContact()">Add Contact</button>
+        <button class="clear-btn" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Search + filter -->
+    <div class="contact-toolbar">
+      <input type="text" id="searchInput" placeholder="Search by name, company, notes..." class="field-input" style="flex:1;" oninput="renderContacts()">
+      <select id="filterStatus" class="field-input" style="width:160px;" onchange="renderContacts()">
+        <option value="">All statuses</option>
+        <option value="contacted">Contacted</option>
+        <option value="replied">Replied</option>
+        <option value="demo">Demo booked</option>
+        <option value="trial">Trial signup</option>
+        <option value="paid">Paid</option>
+        <option value="dead">No interest</option>
+      </select>
+      <select id="filterChannel" class="field-input" style="width:160px;" onchange="renderContacts()">
+        <option value="">All channels</option>
+        <option>Facebook Group</option>
+        <option>Facebook DM</option>
+        <option>Cold Text</option>
+        <option>Friend Text</option>
+        <option>LinkedIn</option>
+        <option>Reddit</option>
+        <option>Nextdoor</option>
+        <option>Supply House Referral</option>
+        <option>Google Maps outreach</option>
+        <option>Demo Inbound</option>
+        <option>Referral from user</option>
+      </select>
+      <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+    </div>
+
+    <!-- Contacts table -->
+    <div class="contact-table-wrap">
+      <table class="contact-table" id="contactTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Channel</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="contactBody">
+          <tr id="emptyRow"><td colspan="9" style="text-align:center;color:var(--muted);padding:32px;font-size:13px;">No contacts yet. Add your first one above.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ DEMO SCRIPT ═══ -->
+  <div class="panel" id="panel-demo">
+    <div class="sec-head">
+      <span class="sec-badge badge-blue">30-Min Close</span>
+      <span class="sec-title">Demo Script — Plumbers Only</span>
+    </div>
+    <p class="sec-desc">Lead with the pricebook offer for Pro & Business. Mention it early — it's your upgrade lever. Tailor the tier in real time based on how many techs they run.</p>
+
+    <div class="timer-row">
+      <div class="t-seg ts1"><span class="tl">Open</span><span class="tv">0–3 min</span></div>
+      <div class="t-seg ts2"><span class="tl">Discovery</span><span class="tv">3–8 min</span></div>
+      <div class="t-seg ts3"><span class="tl">Demo</span><span class="tv">8–20 min</span></div>
+      <div class="t-seg ts4"><span class="tl">Objections</span><span class="tv">20–25 min</span></div>
+      <div class="t-seg ts5"><span class="tl">Close</span><span class="tv">25–30 min</span></div>
+    </div>
+
+    <!-- Open -->
+    <div class="sec-head" style="margin-top:8px;">
+      <span class="sec-badge badge-blue">01 · Open</span>
+      <span style="font-size:15px;font-weight:600;">Build trust in 60 seconds</span>
+    </div>
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">say this word for word</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Hey [Name], Dutch Conners here — appreciate you jumping on. Quick heads up before we start — I'm not a software salesman. I'm a plumber. I own Trusted Plumbing & Water Heaters here in Arizona. I built OneServ because I was getting nickel-and-dimed to death by HouseCall Pro and ServiceTitan, and neither one was built the way we actually work. So I built my own. Today I just want to show you what I built and see if it makes sense for your shop."</div>
+    </div>
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">opening question — listen hard</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Before I show you anything — how many techs are you running, and what are you using right now to dispatch and invoice?"</div>
+    </div>
+    <div class="tip tip-blue"><strong>If they say HCP or ServiceTitan:</strong> You already won the demo. Don't rush — let them vent about it. Every complaint they name is a feature you'll demo directly.</div>
+
+    <hr class="div">
+
+    <!-- Discovery -->
+    <div class="sec-head">
+      <span class="sec-badge badge-teal">02 · Discovery</span>
+      <span style="font-size:15px;font-weight:600;">Find the pain — ask 2–3 max</span>
+    </div>
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">pick the ones that fit</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"What's your biggest headache day-to-day — dispatch, getting invoices out fast, or the office side?"
+
+"When your tech finishes a job, how long until the invoice hits the customer?"
+
+"Are your guys quoting jobs in the field or does it go through you first?"
+
+"What are you paying all-in right now — including add-ons?"</div>
+    </div>
+    <div class="tip tip-amber"><strong>The add-on question is a trap door.</strong> HCP and ST users always pause here. They start counting. That pause is your opening — don't fill it. Let the silence work.</div>
+
+    <hr class="div">
+
+    <!-- Demo Flow -->
+    <div class="sec-head">
+      <span class="sec-badge badge-amber">03 · Demo</span>
+      <span style="font-size:15px;font-weight:600;">Show in this order — 12 minutes</span>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">1 · dispatch speed</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Watch this — from a call coming in to a tech dispatched, it's four taps. No back office, no phone tag. Your tech gets a push notification with the job address, customer info, and notes. That's it. I'll count them out loud."</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">2 · 5-step invoice</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Here's what I built this whole thing around. My techs were wasting 20 minutes after every job on paperwork. In OneServ it's 5 steps — invoice done, signed, emailed to the customer before the tech pulls out of the driveway. I'll walk through all five right now."
+
+[Count each step out loud: one... two... three... four... five.]
+
+"That's it. Job closed."</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">3 · pricebook + sales presentation tool (Pro & Business closer)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"This is the one that surprises people. Your tech pulls up a professional presentation on their phone at the door — photos, three pricing options, bundles. It makes a one-truck operation look like a $10M company. And here's the thing — for Pro and Business users, I'm including my actual pricebook. The one I use every day at Trusted Plumbing. Full plumbing pricebook — water heaters, drain work, leak repair, fixture installs — every item has three options and bundle pricing, with photos, ready to go in the sales tool.
+
+I've been using this pricebook for years. It's built for the way plumbers actually quote jobs — good, better, best. It's not a template I downloaded. It's what I use on real calls."</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">4 · built-in financing</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Financing is built in — not an add-on, not a link you email them later. It's right there in the invoice. Customer applies on the spot. That's the difference between a $400 repair and a $3,500 water heater replacement. I've run that exact call myself. The ones who get financing approved on site close at a completely different rate."</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">5 · pricing — the knockout</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"Now here's the part I really love. OneServ is [Solo: $79/mo · 2–5 techs: $149/mo · 6–10 techs: $249/mo]. That's it. No add-ons. Everything I just showed you — dispatch, invoicing, the sales presentation, the pricebook, financing — all included.
+
+And right now, for the first 100 plumbers who sign up at Pro or Business, I'm including my full plumbing pricebook free. That's something you'd normally pay a consultant $500 to $1,500 to build for you. I'm handing it over because I want the first 100 guys using this to hit the ground running the way I did.
+
+What are you paying right now, all-in?"
+
+[Stop talking. Let them answer. The math does the work.]</div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Objections -->
+    <div class="sec-head">
+      <span class="sec-badge badge-red">04 · Objections</span>
+      <span style="font-size:15px;font-weight:600;">Handle these without missing a beat</span>
+    </div>
+    <div class="obj-grid">
+      <div class="obj-card">
+        <div class="obj-q">"I'm locked into HCP / ServiceTitan"</div>
+        <div class="obj-a"><strong>"How long is left on it?"</strong> [Listen.] "Here's what I'll do — set you up free now so you run both side by side. When your contract is up you'll know OneServ cold. And you'll still get the pricebook — I'm not pulling that once you're in."</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-q">"I need to think about it"</div>
+        <div class="obj-a"><strong>"Totally fair. What's the one thing you'd need to feel good about it?"</strong> [Listen.] "What if I set you up free for 60 days — no card, no commitment. And you'll be getting the pricebook while the first-100 offer is still open. Once I hit 100 that offer is gone."</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-q">"How long has OneServ been around?"</div>
+        <div class="obj-a"><strong>"Just launched — honest answer."</strong> But I'm not a startup founder who's never run a truck. I run Trusted Plumbing every day. I use this on real jobs. When something doesn't work, I'm the guy who fixes it. You have a direct line to the plumber who built it.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-q">"What if I have questions or something breaks?"</div>
+        <div class="obj-a"><strong>"You call or text Dutch. The plumber who built it."</strong> Not a support ticket. Not offshore chat. Me. HouseCall Pro and ServiceTitan will never say that to you.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-q">"My guys aren't tech people"</div>
+        <div class="obj-a"><strong>"Mine weren't either. That's why I built it this way."</strong> Five steps to close an invoice. If they can send a text, they can use OneServ. I'll walk you and your guys through setup personally — it's less than an hour.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-q">"I don't have time to switch right now"</div>
+        <div class="obj-a"><strong>"What if the whole switch took one afternoon?"</strong> I'll help you set it up personally. Job types, tech profiles, first dispatch — one afternoon. I'll be on the phone with you. And your pricebook is already built — I'm handing you mine.</div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Close -->
+    <div class="sec-head">
+      <span class="sec-badge badge-green">05 · Close</span>
+      <span style="font-size:15px;font-weight:600;">Ask for the yes — every time</span>
+    </div>
+    <div class="close-steps">
+      <div class="close-step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <strong>The assumptive close with urgency:</strong>
+          <span class="step-quote">"Based on what you told me about [their specific pain], it sounds like OneServ is a natural fit. And honestly — if you want the pricebook, now's the time. I'm at [X] of 100 and once that hits, the offer is gone. You want to get set up right now while we're here?"</span>
+        </div>
+      </div>
+      <div class="close-step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <strong>If yes — onboard immediately. Don't end the call and send a link.</strong> Open oneserv.app together. Walk through signup. Get their first job type entered. Users who activate during the demo convert at 3× the rate of "I'll do it later."
+        </div>
+      </div>
+      <div class="close-step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <strong>If still on the fence — referral hook:</strong>
+          <span class="step-quote">"No pressure. I'll send you the link. And hey — if you know other plumbers who are fed up with their software, send them my way. You both get an extra free month. I'd rather grow from guys in the trades than run ads."</span>
+        </div>
+      </div>
+      <div class="close-step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <strong>Never let the call end without a next step.</strong> Either they're signing up now, or you're booking a 15-min follow-up for 2 days out: <em>"Can we grab 15 minutes Thursday after you've had a look around?"</em>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Cheat sheet -->
+    <div class="sec-head">
+      <span class="sec-badge badge-purple">⚡ Cheat Sheet</span>
+      <span style="font-size:15px;font-weight:600;">One-liners for every moment</span>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-card"><span class="cheat-vs">vs HCP</span><span class="cheat-line">"No add-ons. Everything included. Half the price."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">vs ServiceTitan</span><span class="cheat-line">"Built by a plumber. Not developers who've never run a truck."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on the pricebook</span><span class="cheat-line">"This is the actual pricebook I use. Not a template — my real business."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on support</span><span class="cheat-line">"You call Dutch. The guy who built it."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on complexity</span><span class="cheat-line">"5 steps to close an invoice. That's it."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on urgency</span><span class="cheat-line">"First 100 get the pricebook free. After that it's gone."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on being new</span><span class="cheat-line">"I use it every day on real jobs. It works."</span></div>
+      <div class="cheat-card"><span class="cheat-vs">on financing</span><span class="cheat-line">"Built in. Not a link. Not an add-on. Right there in the invoice."</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ FACEBOOK POSTS ═══ -->
+  <div class="panel" id="panel-fb">
+    <div class="sec-head">
+      <span class="sec-badge badge-blue">Facebook Groups</span>
+      <span class="sec-title">Post Variations — Rotate Daily</span>
+    </div>
+    <p class="sec-desc">Never post the same copy twice in the same group. Use a different variation each time. Don't pitch — tell a story. The link goes in the comments, not the post body.</p>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">post 1 · the origin story (highest engagement)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">I'm a plumber in Arizona. I've been running Trusted Plumbing & Water Heaters for years.
+
+Two years ago I was paying HouseCall Pro $300+/month in add-ons for features that should have been included. Before that I tried ServiceTitan — built by developers who've clearly never run a service truck in their life.
+
+So I did something stupid. I built my own.
+
+OneServ is a dispatch and field service app built specifically for plumbers. Mobile-first for your techs. 5 steps to close an invoice. Sales presentation tool built in. Financing built in. No add-ons — one price, everything included.
+
+We launch April 14th. For the first 100 plumbers who sign up at Pro or Business, I'm including my actual plumbing pricebook — the one I use every day. Full pricebook, photos, 3-option pricing, bundles. Water heaters, drain work, fixtures, leak repair — all of it. Free.
+
+Not a template. My real pricebook.
+
+Link in comments if you want to get on the list.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">post 2 · the pain post</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Real question for plumbing business owners —
+
+How much are you actually paying for your field service software when you add up all the add-ons?
+
+I was paying HouseCall Pro $280/month by the time I counted everything. The base plan was $65. The rest was fees for features that should have been included from day one.
+
+Built my own app. OneServ. Everything included. One price.
+
+Launching April 14th. First 100 Pro/Business signups get my complete plumbing pricebook free — photos, 3-option pricing, bundles. The actual pricebook I use at my own company.
+
+Drop your number below — curious what everyone's paying. Link in comments.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">post 3 · the pricebook hook</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">If you're quoting plumbing jobs from memory or a spreadsheet from 2018, this is for you.
+
+I spent years building out a proper pricebook for my plumbing company — 3-option pricing (good/better/best), bundle pricing, photos for every item. Water heaters, drain work, fixture installs, leak repair, the works.
+
+I'm giving it away free to the first 100 plumbers who sign up for OneServ Pro or Business before April 14th.
+
+OneServ is the dispatch and invoicing app I built for my own company. Mobile-first. 5-step invoice. Built-in financing. Sales presentation tool that uses the pricebook right at the door.
+
+If you want the pricebook — link in comments. Once I hit 100 signups the offer is done.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">post 4 · short &amp; punchy (for groups that don't like long posts)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Plumber built a dispatch app for plumbers. No add-ons. One price. Launching April 14th.
+
+First 100 Pro/Business users get a complete plumbing pricebook free. Photos. 3-option pricing. Bundles. Water heaters through fixture installs.
+
+The actual pricebook I use at my own company — not a template.
+
+Link in comments.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">post 5 · launch week urgency post</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">We go live Monday April 14th.
+
+OneServ — field service app built by a plumber for plumbers. Dispatch, invoicing, sales presentations, financing. No add-ons.
+
+At [X] of 100 on the free pricebook offer. Pro and Business signups get my full plumbing pricebook — 3-option pricing, photos, bundles — the one I use every day at Trusted Plumbing.
+
+Once we hit 100 the offer is closed. Link in comments if you want in before we launch.</div>
+    </div>
+
+    <div class="tip tip-blue"><strong>Engagement hack:</strong> Ask a question at the end of every post ("What are you paying right now?" or "Anyone else been through the HCP add-on maze?"). Comments boost reach and give you warm leads to DM directly.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ DM OUTREACH ═══ -->
+  <div class="panel" id="panel-dm">
+    <div class="sec-head">
+      <span class="sec-badge badge-teal">DM Outreach</span>
+      <span class="sec-title">Cold → Warm Scripts</span>
+    </div>
+    <p class="sec-desc">Send 30–50 per day. Owner-to-owner tone. Short. No pitch decks. One ask per message.</p>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold DM #1 · facebook / instagram (primary)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — Dutch Conners here. I own Trusted Plumbing & Water Heaters in Arizona. 
+
+I built a dispatch and invoicing app called OneServ specifically for plumbing companies — tired of paying HouseCall Pro and ServiceTitan for add-ons that should've been included.
+
+Launching April 14th. First 100 plumbers at Pro or Business get my actual plumbing pricebook free — photos, 3-option pricing, bundles. Everything from water heaters to fixture installs.
+
+Worth a 10-minute look? Happy to show you what I built.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cold DM #2 · shorter version</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — plumber to plumber. I built a field service app called OneServ — built it because HCP and ServiceTitan drove me crazy with add-on fees.
+
+Launching April 14. First 100 Pro/Business signups get my full plumbing pricebook free (the one I use at my own company — not a template).
+
+Want me to send you a quick look?</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">follow-up DM (if no reply after 2 days)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Hey [Name] — following up quick. At [X] of 100 on the pricebook offer — didn't want you to miss it if you were interested. No pressure either way. Just wanted to make sure my first message didn't get buried.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">warm reply — when they ask "what does it cost?"</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Starter is $79/month — 1 mobile user. Pro is $149 — up to 5 techs. Business is $249 — up to 10 techs. No add-ons, no per-tech fees on top.
+
+For context — HouseCall Pro's comparable plan runs $149-$349/month before add-ons.
+
+Pro and Business include my full plumbing pricebook free right now (first 100 only). Want to jump on a quick call and I'll walk you through it? Takes 20 minutes.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">warm reply — when they say "i'm on hcp / servicetitan"</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Honestly that's exactly who I built this for. What's killing you most about it — the price, the complexity, or the add-ons?
+
+[Listen/wait for response, then:]
+
+That's exactly what I fixed. Happy to show you — 20 minutes on a call and you'll see the difference. And if your contract has time left, I'll set you up free now so you're ready to switch when it's up. You'd still get the pricebook while the offer's open.</div>
+    </div>
+
+    <div class="tip tip-green"><strong>Volume target:</strong> 30–50 DMs/day. At a 10% reply rate that's 3–5 conversations/day. At 30% of those booking a demo that's 1–2 demos/day from DMs alone. Consistency beats volume — send every single day.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ LANDING COPY ═══ -->
+  <div class="panel" id="panel-landing">
+    <div class="sec-head">
+      <span class="sec-badge badge-amber">Landing Page</span>
+      <span class="sec-title">Copy Blocks for oneserv.app</span>
+    </div>
+    <p class="sec-desc">Use these as-is or adapt. Every block is written for a plumbing owner scanning on their phone.</p>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">hero headline</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">The Field Service App Built By a Plumber.
+Not by developers. Not by a VC-funded startup.
+By a plumber who got tired of paying for software that doesn't work the way we work.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">subheadline</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Dispatch faster. Invoice in 5 steps. Quote jobs professionally at the door.
+No add-ons. No per-tech fees. One price, everything included.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">pricebook offer block (pro + business)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">🔒 First 100 Plumbers Only — Free Pricebook Included
+
+Sign up for Pro or Business before we hit 100 users and get our complete plumbing pricebook — free.
+
+This isn't a template we found online. It's the actual pricebook used every day at Trusted Plumbing & Water Heaters in Arizona. Built with:
+
+✓ 3-option pricing on every item (good / better / best)
+✓ Bundle pricing for common job combinations  
+✓ Photos for every line item
+✓ Full coverage — water heaters, drain cleaning, leak repair, fixture installs, and more
+✓ Designed to plug directly into the OneServ sales presentation tool
+
+A professional pricebook like this costs $500–$1,500 to build from scratch.
+You get it free. But only for the first 100.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">vs competitors section</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">HouseCall Pro: Good starting point. Nickel-and-dimes you on every add-on.
+ServiceTitan: Powerful but built by people who've never run a service truck. Complex. Expensive. Not for small teams.
+
+OneServ: Built by a plumber. Priced for small shops. Complete out of the box.
+
+$79/month. $149/month. $249/month.
+Everything included. Nothing hidden.</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">social proof / founder note</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">"I built OneServ because I couldn't find software that actually fit the way my company runs. I use it every day. My techs use it every day. When something needs fixing, I fix it. When you have a question, you get me — not a support ticket."
+
+— Dutch Conners, Owner · Trusted Plumbing & Water Heaters · OneServ Founder</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">cta button text options</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Primary CTA: "Claim Your Spot + Free Pricebook →"
+Secondary CTA: "See a 10-Minute Demo"
+Urgency line below CTA: "[X] of 100 pricebook spots remaining. Pro & Business only."</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ FOLLOW-UP EMAILS ═══ -->
+  <div class="panel" id="panel-followup">
+    <div class="sec-head">
+      <span class="sec-badge badge-purple">Follow-Up Emails</span>
+      <span class="sec-title">Post-Demo Sequence</span>
+    </div>
+    <p class="sec-desc">Send within 2 hours of a demo that didn't close on the call. Short, personal, from Dutch — not a marketing template.</p>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">email 1 · same day (within 2 hrs of demo)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Subject: Good talking today, [Name]
+
+Hey [Name],
+
+Appreciate you taking the time today. Here's your signup link: [link]
+
+Quick reminder — the free pricebook is included with Pro and Business for the first 100 signups. We're at [X] right now so there's still room, but I don't want you to miss it if you're planning to come back and sign up later.
+
+If you have any questions after you poke around, text or call me directly: [Dutch's number].
+
+— Dutch</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">email 2 · day 3 follow-up</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Subject: Quick follow-up — OneServ
+
+Hey [Name],
+
+Just checking in. Did you get a chance to look around after our call?
+
+Happy to answer any questions — or jump on another 15 minutes if it'd help. Sometimes it's easier to just talk through the specific way your jobs run and make sure it fits.
+
+We're at [X] of 100 on the pricebook offer. Still open if you're thinking about Pro or Business.
+
+— Dutch
+[phone number]</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-header"><span class="copy-title">email 3 · day 7 (last touch)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Subject: Last note from me
+
+Hey [Name],
+
+Last follow-up — I don't want to be that guy who keeps emailing.
+
+We're getting close to 100 on the pricebook offer. Once that's done I won't be including it for free again — it'll be something I sell separately down the road.
+
+If the timing's not right, totally understand. When things settle down for you, the door's open. Just reach out directly.
+
+— Dutch
+[phone number]
+
+P.S. — If you know any other plumbers who might want this, send them my way. You both get an extra free month.</div>
+    </div>
+
+    <div class="tip tip-amber"><strong>Text beats email for tradespeople.</strong> If you have their cell number from the demo booking, a personal text on day 2 gets a higher response rate than any email. Keep it under 3 sentences: "Hey [Name], Dutch from OneServ. Had a chance to look around? Happy to answer anything quick."</div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'contacts') renderContacts();
+  if (id === 'followups') renderFollowUps();
+  if (id === 'scorecard') renderScorecard();
+  if (id === 'working') renderWwBoards();
+  if (id === 'demoprep') renderDemoPrep();
+}
+
+// ─────────────────────────────────────────
+// TRACKER COUNTERS
+// ─────────────────────────────────────────
+let state = { signup: 0, demo: 0, paid: 0 };
+function adjust(key, delta) {
+  state[key] = Math.max(0, state[key] + delta);
+  document.getElementById(key + 'Val').textContent = state[key];
+  if (key === 'signup') {
+    document.getElementById('signupCount').textContent = state.signup;
+    const pct = Math.min(100, Math.round((state.signup / 400) * 100));
+    document.getElementById('signupPct').textContent = pct + '%';
+    document.getElementById('signupBar').style.width = pct + '%';
+  }
+  if (key === 'demo') document.getElementById('demoCount').textContent = state.demo;
+  if (key === 'paid') document.getElementById('paidCount').textContent = state.paid;
+}
+function updateTouches() {
+  let total = 0;
+  document.querySelectorAll('.touch-check').forEach(cb => {
+    if (cb.checked) total += parseInt(cb.getAttribute('data-touches') || 0);
+  });
+  document.getElementById('touchCount').textContent = total;
+  const pct = Math.min(100, Math.round((total / 100) * 100));
+  document.getElementById('touchPct').textContent = pct + '%';
+  document.getElementById('touchBar').style.width = pct + '%';
+}
+function resetDay() {
+  if (!confirm("Reset today's checklist? Your signup counts will stay.")) return;
+  document.querySelectorAll('.cl-check').forEach(cb => cb.checked = false);
+  updateTouches();
+}
+
+// ─────────────────────────────────────────
+// COPY BLOCKS
+// ─────────────────────────────────────────
+function copyBlock(btn) {
+  const body = btn.closest('.copy-block').querySelector('.copy-body');
+  navigator.clipboard.writeText(body.innerText).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ─────────────────────────────────────────
+// DAILY DEBRIEF
+// ─────────────────────────────────────────
+const LAUNCH_START = new Date('2025-03-27');
+function buildDebriefList() {
+  const list = document.getElementById('debriefList');
+  if (!list) return;
+  list.innerHTML = '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (let d = 1; d <= 14; d++) {
+    const date = new Date(LAUNCH_START); date.setDate(date.getDate() + d - 1);
+    const dateStr = date.toISOString().slice(0,10);
+    const isPast = date <= today;
+    const isToday = date.toDateString() === today.toDateString();
+    const saved = localStorage.getItem('debrief_' + dateStr) || '';
+    const label = isToday ? `Day ${d} — TODAY · ${date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}` : `Day ${d} · ${date.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}`;
+    const el = document.createElement('div');
+    el.className = 'debrief-day';
+    el.innerHTML = `
+      <div class="debrief-day-header" onclick="toggleDebrief(this)" data-day="${d}">
+        <span class="debrief-day-label">${label}</span>
+        <span class="debrief-day-meta">${saved ? '✓ notes saved' : isPast ? 'tap to add notes' : 'upcoming'}</span>
+      </div>
+      <div class="debrief-body${isToday ? ' open' : ''}" id="deb-body-${d}">
+        <textarea class="debrief-textarea" id="deb-text-${d}" placeholder="What worked today? What didn't? Best performing channel? Any surprise wins or blockers? Note your signup count.">${saved}</textarea>
+        <div style="display:flex;align-items:center;margin-top:8px;">
+          <button class="debrief-save" onclick="saveDebrief('${dateStr}',${d})">Save notes</button>
+          <span class="debrief-saved" id="deb-saved-${d}">Saved!</span>
+        </div>
+      </div>`;
+    list.appendChild(el);
+  }
+}
+function toggleDebrief(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function saveDebrief(dateStr, d) {
+  const text = document.getElementById('deb-text-' + d).value;
+  localStorage.setItem('debrief_' + dateStr, text);
+  const saved = document.getElementById('deb-saved-' + d);
+  saved.style.opacity = '1';
+  setTimeout(() => saved.style.opacity = '0', 2000);
+  const header = document.querySelector(`[data-day="${d}"]`);
+  if (header) header.querySelector('.debrief-day-meta').textContent = text ? '✓ notes saved' : 'tap to add notes';
+}
+
+// ─────────────────────────────────────────
+// FOLLOW-UP QUEUE
+// ─────────────────────────────────────────
+let followUps = JSON.parse(localStorage.getItem('oneserv_followups') || '[]');
+let fqFilter = 'all';
+function saveFollowUps() { localStorage.setItem('oneserv_followups', JSON.stringify(followUps)); }
+function addFollowUp() {
+  const name = document.getElementById('fqName').value.trim();
+  const date = document.getElementById('fqDate').value;
+  if (!name || !date) { alert('Name and date are required.'); return; }
+  followUps.push({ id: Date.now(), name, date, context: document.getElementById('fqContext').value.trim(), note: document.getElementById('fqNote').value.trim(), done: false });
+  followUps.sort((a,b) => a.date.localeCompare(b.date));
+  saveFollowUps();
+  ['fqName','fqDate','fqContext','fqNote'].forEach(id => document.getElementById(id).value = '');
+  renderFollowUps();
+}
+function toggleFqDone(id) {
+  const f = followUps.find(f => f.id === id);
+  if (f) { f.done = !f.done; saveFollowUps(); renderFollowUps(); }
+}
+function deleteFq(id) {
+  followUps = followUps.filter(f => f.id !== id);
+  saveFollowUps(); renderFollowUps();
+}
+function setFqFilter(filter, btn) {
+  fqFilter = filter;
+  document.querySelectorAll('#panel-followups .week-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFollowUps();
+}
+function renderFollowUps() {
+  const today = new Date().toISOString().slice(0,10);
+  const overdue = followUps.filter(f => !f.done && f.date < today);
+  if (overdue.length > 0) {
+    document.getElementById('overdueAlert').style.display = 'block';
+    document.getElementById('overdueMsg').textContent = `${overdue.length} overdue follow-up${overdue.length > 1 ? 's' : ''} — take care of these first.`;
+  } else {
+    document.getElementById('overdueAlert').style.display = 'none';
+  }
+  let filtered = followUps;
+  if (fqFilter === 'overdue') filtered = followUps.filter(f => !f.done && f.date < today);
+  else if (fqFilter === 'today') filtered = followUps.filter(f => !f.done && f.date === today);
+  else if (fqFilter === 'upcoming') filtered = followUps.filter(f => !f.done && f.date > today);
+  else if (fqFilter === 'done') filtered = followUps.filter(f => f.done);
+  const list = document.getElementById('fqList');
+  if (!list) return;
+  if (filtered.length === 0) { list.innerHTML = '<div class="fq-empty">No follow-ups in this view.</div>'; return; }
+  list.innerHTML = filtered.map(f => {
+    const isOverdue = !f.done && f.date < today;
+    const isToday = !f.done && f.date === today;
+    const cls = f.done ? 'done' : isOverdue ? 'overdue' : isToday ? 'today' : 'upcoming';
+    const badgeCls = f.done ? 'fq-done-badge' : isOverdue ? 'fq-overdue-badge' : isToday ? 'fq-today-badge' : 'fq-upcoming-badge';
+    const badgeText = f.done ? 'Done' : isOverdue ? 'Overdue' : isToday ? 'Today' : f.date;
+    return `<div class="fq-item ${cls}">
+      <input type="checkbox" class="fq-check" ${f.done ? 'checked' : ''} onchange="toggleFqDone(${f.id})">
+      <div class="fq-body">
+        <div class="fq-name">${esc(f.name)}</div>
+        <div class="fq-meta">${esc(f.context)}</div>
+        ${f.note ? `<div class="fq-note">${esc(f.note)}</div>` : ''}
+      </div>
+      <span class="fq-date-badge ${badgeCls}">${badgeText}</span>
+      <button class="fq-del" onclick="deleteFq(${f.id})">×</button>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+// WEEKLY SCORECARD
+// ─────────────────────────────────────────
+const weeks = [
+  { label: 'Week 1', dates: 'Mar 27–30', days: '1–4', goals: { signups: 75, demos: 8, paid: 0, touches: 400 } },
+  { label: 'Week 2', dates: 'Mar 31–Apr 6', days: '5–11', goals: { signups: 210, demos: 25, paid: 15, touches: 700 } },
+  { label: 'Launch Week', dates: 'Apr 7–14', days: '12–14', goals: { signups: 400, demos: 40, paid: 100, touches: 400 } },
+];
+function renderScorecard() {
+  const tabsEl = document.getElementById('weekTabs');
+  const panelsEl = document.getElementById('weekPanels');
+  if (!tabsEl || !panelsEl) return;
+  tabsEl.innerHTML = weeks.map((w,i) => `<button class="week-tab ${i===0?'active':''}" onclick="switchWeek(${i},this)">${w.label}</button>`).join('');
+  panelsEl.innerHTML = weeks.map((w,i) => {
+    const saved = JSON.parse(localStorage.getItem('scorecard_w' + i) || '{}');
+    return `<div class="week-panel ${i===0?'active':''}" id="week-panel-${i}">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;font-family:'DM Mono',monospace;">${w.dates} · Days ${w.days}</div>
+      <div class="scorecard-grid">
+        ${[
+          {key:'signups', label:'Total signups', goal: w.goals.signups},
+          {key:'demos', label:'Demos run', goal: w.goals.demos},
+          {key:'paid', label:'Paid users', goal: w.goals.paid},
+          {key:'touches', label:'Total touches', goal: w.goals.touches},
+          {key:'convrate', label:'Conv. rate %', goal: null},
+          {key:'bestchannel', label:'Best channel', goal: null, text:true},
+        ].map(f => `<div class="sc-card">
+          <span class="sc-label">${f.label}</span>
+          <input class="${f.text ? 'field-input' : 'sc-input'}" type="${f.text ? 'text' : 'number'}" 
+            id="sc-${i}-${f.key}" 
+            value="${saved[f.key]||''}" 
+            placeholder="${f.text ? 'e.g. Facebook Groups' : '0'}"
+            oninput="saveScorecard(${i})"
+            style="${f.text ? 'font-size:13px;width:100%;' : ''}">
+          ${f.goal !== null ? `<div class="sc-goal">Goal: <span>${f.goal}+</span></div>` : ''}
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:4px;">
+        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px;">Week ${i+1} notes — what happened, what changed, what to do different next week</div>
+        <textarea class="sc-notes-area" id="sc-${i}-notes" placeholder="Write anything here — wins, surprises, what to double down on, what to drop." oninput="saveScorecard(${i})">${saved.notes||''}</textarea>
+      </div>
+    </div>`;
+  }).join('');
+}
+function switchWeek(i, btn) {
+  document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#weekTabs .week-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('week-panel-' + i).classList.add('active');
+  btn.classList.add('active');
+}
+function saveScorecard(i) {
+  const keys = ['signups','demos','paid','touches','convrate','bestchannel','notes'];
+  const data = {};
+  keys.forEach(k => {
+    const el = document.getElementById('sc-' + i + '-' + k);
+    if (el) data[k] = el.value;
+  });
+  localStorage.setItem('scorecard_w' + i, JSON.stringify(data));
+}
+
+// ─────────────────────────────────────────
+// WHAT'S WORKING BOARD
+// ─────────────────────────────────────────
+const wwBoards = ['channels','posts','dms','notworking'];
+let wwData = JSON.parse(localStorage.getItem('oneserv_ww') || '{"channels":[],"posts":[],"dms":[],"notworking":[]}');
+function saveWw() { localStorage.setItem('oneserv_ww', JSON.stringify(wwData)); }
+function showWwInput(board) {
+  const row = document.getElementById('ww-' + board + '-input');
+  if (row) { row.style.display = row.style.display === 'none' ? 'flex' : 'none'; if (row.style.display === 'flex') document.getElementById('ww-' + board + '-text').focus(); }
+}
+function addWwItem(board) {
+  const input = document.getElementById('ww-' + board + '-text');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!wwData[board]) wwData[board] = [];
+  wwData[board].push({ id: Date.now(), text });
+  saveWw(); input.value = ''; renderWwBoards();
+}
+function deleteWwItem(board, id) {
+  wwData[board] = wwData[board].filter(i => i.id !== id);
+  saveWw(); renderWwBoards();
+}
+function moveWwItem(board, id, dir) {
+  const arr = wwData[board];
+  const idx = arr.findIndex(i => i.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= arr.length) return;
+  [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+  saveWw(); renderWwBoards();
+}
+function renderWwBoards() {
+  wwBoards.forEach(board => {
+    const listEl = document.getElementById('ww-' + board + '-list');
+    if (!listEl) return;
+    const items = wwData[board] || [];
+    if (items.length === 0) { listEl.innerHTML = '<div style="padding:12px 0;font-size:12px;color:var(--muted);">Nothing added yet — add your best performers as you discover them.</div>'; return; }
+    const rankClasses = ['ww-rank-1','ww-rank-2','ww-rank-3','ww-rank-n'];
+    listEl.innerHTML = items.map((item, i) => `
+      <div class="ww-item">
+        <div class="ww-rank ${rankClasses[Math.min(i,3)]}">${i+1}</div>
+        <div class="ww-text">${esc(item.text)}</div>
+        <button style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0 3px;" onclick="moveWwItem('${board}',${item.id},-1)" title="Move up">↑</button>
+        <button style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0 3px;" onclick="moveWwItem('${board}',${item.id},1)" title="Move down">↓</button>
+        <button class="ww-del" onclick="deleteWwItem('${board}',${item.id})">×</button>
+      </div>`).join('');
+  });
+}
+
+// ─────────────────────────────────────────
+// DEMO PREP CARDS
+// ─────────────────────────────────────────
+let demoPreps = JSON.parse(localStorage.getItem('oneserv_demoprep') || '[]');
+function saveDemoPreps() { localStorage.setItem('oneserv_demoprep', JSON.stringify(demoPreps)); }
+function addDemoPrep() {
+  const name = document.getElementById('dpName').value.trim();
+  if (!name) { document.getElementById('dpName').focus(); return; }
+  demoPreps.unshift({
+    id: Date.now(),
+    name, company: document.getElementById('dpCompany').value.trim(),
+    time: document.getElementById('dpTime').value,
+    software: document.getElementById('dpSoftware').value,
+    techs: document.getElementById('dpTechs').value.trim(),
+    tier: document.getElementById('dpTier').value,
+    pain: document.getElementById('dpPain').value.trim(),
+    phone: document.getElementById('dpPhone').value.trim(),
+    done: false
+  });
+  saveDemoPreps();
+  ['dpName','dpCompany','dpTime','dpTechs','dpPain','dpPhone'].forEach(id => document.getElementById(id).value = '');
+  renderDemoPrep();
+}
+function markDemoDone(id) {
+  const d = demoPreps.find(d => d.id === id);
+  if (d) { d.done = !d.done; saveDemoPreps(); renderDemoPrep(); }
+}
+function deleteDemo(id) {
+  demoPreps = demoPreps.filter(d => d.id !== id);
+  saveDemoPreps(); renderDemoPrep();
+}
+function renderDemoPrep() {
+  const list = document.getElementById('dpList');
+  if (!list) return;
+  if (demoPreps.length === 0) { list.innerHTML = '<p class="dp-empty">No demo prep cards yet. Add one before your next call.</p>'; return; }
+  const tierLabels = { starter: 'Starter · $79', pro: 'Pro · $149', biz: 'Business · $249' };
+  const tierClasses = { starter: 'dp-tier-starter', pro: 'dp-tier-pro', biz: 'dp-tier-biz' };
+  const upcoming = demoPreps.filter(d => !d.done);
+  const done = demoPreps.filter(d => d.done);
+  const renderCard = d => {
+    const timeStr = d.time ? new Date(d.time).toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
+    return `<div class="dp-card" style="${d.done ? 'opacity:.5;' : ''}">
+      <div class="dp-card-header">
+        <span class="dp-card-name">${esc(d.name)}${d.company ? ' · ' + esc(d.company) : ''}</span>
+        <span class="dp-card-time">${timeStr}</span>
+      </div>
+      <div class="dp-card-body">
+        <div class="dp-row"><span class="dp-row-label">Software</span><span class="dp-row-val">${esc(d.software) || '—'}</span></div>
+        <div class="dp-row"><span class="dp-row-label">Techs</span><span class="dp-row-val">${esc(d.techs) || '—'}</span></div>
+        <div class="dp-row"><span class="dp-row-label">Best tier</span><span class="dp-row-val"><span class="dp-tier ${tierClasses[d.tier]||'dp-tier-starter'}">${tierLabels[d.tier]||'Starter'}</span></span></div>
+        <div class="dp-row"><span class="dp-row-label">Lead with</span><span class="dp-row-val">${esc(d.pain) || '—'}</span></div>
+        ${d.phone ? `<div class="dp-row"><span class="dp-row-label">Call</span><span class="dp-row-val" style="color:var(--accent);">${esc(d.phone)}</span></div>` : ''}
+      </div>
+      <div class="dp-card-footer">
+        <button class="dp-btn dp-btn-primary" onclick="markDemoDone(${d.id})">${d.done ? 'Mark undone' : 'Mark done'}</button>
+        <button class="dp-btn" onclick="deleteDemo(${d.id})">Remove</button>
+      </div>
+    </div>`;
+  };
+  let html = '';
+  if (upcoming.length > 0) { html += `<div style="font-size:11px;font-weight:600;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Upcoming demos</div><div class="dp-grid">${upcoming.map(renderCard).join('')}</div>`; }
+  if (done.length > 0) { html += `<div style="font-size:11px;font-weight:600;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 10px;">Completed</div><div class="dp-grid">${done.map(renderCard).join('')}</div>`; }
+  list.innerHTML = html;
+}
+
+// ─────────────────────────────────────────
+// CONTACTS CRM
+// ─────────────────────────────────────────
+let contacts = JSON.parse(localStorage.getItem('oneserv_contacts') || '[]');
+function saveContacts() { localStorage.setItem('oneserv_contacts', JSON.stringify(contacts)); }
+function addContact() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { document.getElementById('fName').focus(); return; }
+  contacts.unshift({ id: Date.now(), name, company: document.getElementById('fCompany').value.trim(), phone: document.getElementById('fPhone').value.trim(), channel: document.getElementById('fChannel').value, status: document.getElementById('fStatus').value, size: document.getElementById('fSize').value.trim(), notes: document.getElementById('fNotes').value.trim(), date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}) });
+  saveContacts(); clearForm(); renderContacts();
+}
+function clearForm() {
+  ['fName','fCompany','fPhone','fSize','fNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fChannel').value = '';
+  document.getElementById('fStatus').value = 'contacted';
+}
+function deleteContact(id) {
+  if (!confirm('Remove this contact?')) return;
+  contacts = contacts.filter(c => c.id !== id);
+  saveContacts(); renderContacts();
+}
+function updateStatus(id, newStatus) {
+  const c = contacts.find(c => c.id === id);
+  if (c) { c.status = newStatus; saveContacts(); renderContacts(); }
+}
+const statusLabels = { contacted:'Contacted', replied:'Replied', demo:'Demo booked', trial:'Trial signup', paid:'Paid', dead:'No interest' };
+function renderContacts() {
+  const search = (document.getElementById('searchInput')?.value||'').toLowerCase();
+  const filterStatus = document.getElementById('filterStatus')?.value||'';
+  const filterChannel = document.getElementById('filterChannel')?.value||'';
+  let filtered = contacts.filter(c => {
+    const ms = !search || c.name.toLowerCase().includes(search) || (c.company||'').toLowerCase().includes(search) || (c.notes||'').toLowerCase().includes(search);
+    return ms && (!filterStatus || c.status === filterStatus) && (!filterChannel || c.channel === filterChannel);
+  });
+  const counts = { contacted:0, replied:0, demo:0, trial:0, paid:0, dead:0 };
+  contacts.forEach(c => { if (counts[c.status] !== undefined) counts[c.status]++; });
+  document.getElementById('cTotal').textContent = contacts.length;
+  document.getElementById('cContacted').textContent = counts.contacted + counts.replied;
+  document.getElementById('cDemo').textContent = counts.demo;
+  document.getElementById('cTrial').textContent = counts.trial;
+  document.getElementById('cPaidStat').textContent = counts.paid;
+  document.getElementById('cDead').textContent = counts.dead;
+  const tbody = document.getElementById('contactBody');
+  if (!tbody) return;
+  if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:32px;font-size:13px;">${contacts.length===0?'No contacts yet. Add your first one above.':'No contacts match your search.'}</td></tr>`; return; }
+  tbody.innerHTML = filtered.map(c => `<tr>
+    <td style="font-weight:500;white-space:nowrap;">${esc(c.name)}</td>
+    <td style="color:var(--muted);white-space:nowrap;">${esc(c.company)}</td>
+    <td style="font-family:'DM Mono',monospace;font-size:12px;white-space:nowrap;">${esc(c.phone)}</td>
+    <td style="white-space:nowrap;"><span style="font-size:11px;color:var(--muted);">${esc(c.channel)}</span></td>
+    <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${esc(c.size)}</td>
+    <td><select onchange="updateStatus(${c.id},this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 6px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">${Object.entries(statusLabels).map(([v,l])=>`<option value="${v}"${c.status===v?' selected':''}>${l}</option>`).join('')}</select></td>
+    <td class="notes-cell" title="${esc(c.notes)}">${esc(c.notes)}</td>
+    <td style="font-size:11px;color:var(--muted);white-space:nowrap;">${esc(c.date)}</td>
+    <td><button class="del-btn" onclick="deleteContact(${c.id})">×</button></td>
+  </tr>`).join('');
+}
+function esc(str) { return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toggleForm() {
+  const form = document.getElementById('addForm');
+  const btn = form.querySelector('.form-toggle-btn');
+  const grid = form.querySelector('.form-grid');
+  const actions = form.querySelector('.add-btn')?.parentElement;
+  const isHidden = grid.style.display === 'none';
+  grid.style.display = isHidden ? 'grid' : 'none';
+  if (actions) actions.style.display = isHidden ? 'flex' : 'none';
+  btn.textContent = isHidden ? '− Collapse' : '+ Add Contact';
+}
+function exportCSV() {
+  if (contacts.length === 0) { alert('No contacts to export yet.'); return; }
+  const headers = ['Name','Company','Phone','Channel','Size','Status','Notes','Date'];
+  const rows = contacts.map(c => [c.name,c.company,c.phone,c.channel,c.size,statusLabels[c.status]||c.status,c.notes,c.date].map(v=>`"${(v||'').replace(/"/g,'""')}"`));
+  const csv = [headers.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'oneserv_contacts_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+setTimeout(() => { document.getElementById('urgFill').style.width = '3%'; }, 300);
+buildDebriefList();
+renderContacts();
+renderFollowUps();
+renderWwBoards();
+</script>
+
+// ── Tracker counters ──
+let state = { signup: 0, demo: 0, paid: 0 };
+function adjust(key, delta) {
+  state[key] = Math.max(0, state[key] + delta);
+  document.getElementById(key + 'Val').textContent = state[key];
+  if (key === 'signup') {
+    document.getElementById('signupCount').textContent = state.signup;
+    const pct = Math.min(100, Math.round((state.signup / 400) * 100));
+    document.getElementById('signupPct').textContent = pct + '%';
+    document.getElementById('signupBar').style.width = pct + '%';
+  }
+  if (key === 'demo') document.getElementById('demoCount').textContent = state.demo;
+  if (key === 'paid') document.getElementById('paidCount').textContent = state.paid;
+}
+function updateTouches() {
+  let total = 0;
+  document.querySelectorAll('.touch-check').forEach(cb => {
+    if (cb.checked) total += parseInt(cb.getAttribute('data-touches') || 0);
+  });
+  document.getElementById('touchCount').textContent = total;
+  const pct = Math.min(100, Math.round((total / 100) * 100));
+  document.getElementById('touchPct').textContent = pct + '%';
+  document.getElementById('touchBar').style.width = pct + '%';
+}
+function resetDay() {
+  if (!confirm("Reset today's checklist? Your signup counts will stay.")) return;
+  document.querySelectorAll('.cl-check').forEach(cb => cb.checked = false);
+  updateTouches();
+}
+
+// ── Copy blocks ──
+function copyBlock(btn) {
+  const body = btn.closest('.copy-block').querySelector('.copy-body');
+  navigator.clipboard.writeText(body.innerText).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── Contacts CRM ──
+let contacts = JSON.parse(localStorage.getItem('oneserv_contacts') || '[]');
+
+function saveContacts() {
+  localStorage.setItem('oneserv_contacts', JSON.stringify(contacts));
+}
+
+function addContact() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { document.getElementById('fName').focus(); return; }
+  const contact = {
+    id: Date.now(),
+    name,
+    company: document.getElementById('fCompany').value.trim(),
+    phone: document.getElementById('fPhone').value.trim(),
+    channel: document.getElementById('fChannel').value,
+    status: document.getElementById('fStatus').value,
+    size: document.getElementById('fSize').value.trim(),
+    notes: document.getElementById('fNotes').value.trim(),
+    date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric' })
+  };
+  contacts.unshift(contact);
+  saveContacts();
+  clearForm();
+  renderContacts();
+}
+
+function clearForm() {
+  ['fName','fCompany','fPhone','fSize','fNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fChannel').value = '';
+  document.getElementById('fStatus').value = 'contacted';
+}
+
+function deleteContact(id) {
+  if (!confirm('Remove this contact?')) return;
+  contacts = contacts.filter(c => c.id !== id);
+  saveContacts();
+  renderContacts();
+}
+
+function updateStatus(id, newStatus) {
+  const c = contacts.find(c => c.id === id);
+  if (c) { c.status = newStatus; saveContacts(); renderContacts(); }
+}
+
+const statusLabels = {
+  contacted: 'Contacted', replied: 'Replied', demo: 'Demo booked',
+  trial: 'Trial signup', paid: 'Paid', dead: 'No interest'
+};
+
+function renderContacts() {
+  const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const filterStatus = document.getElementById('filterStatus')?.value || '';
+  const filterChannel = document.getElementById('filterChannel')?.value || '';
+
+  let filtered = contacts.filter(c => {
+    const matchSearch = !search ||
+      c.name.toLowerCase().includes(search) ||
+      (c.company||'').toLowerCase().includes(search) ||
+      (c.notes||'').toLowerCase().includes(search);
+    const matchStatus = !filterStatus || c.status === filterStatus;
+    const matchChannel = !filterChannel || c.channel === filterChannel;
+    return matchSearch && matchStatus && matchChannel;
+  });
+
+  // Update stats (always from full contacts, not filtered)
+  const counts = { contacted:0, replied:0, demo:0, trial:0, paid:0, dead:0 };
+  contacts.forEach(c => { if (counts[c.status] !== undefined) counts[c.status]++; });
+  document.getElementById('cTotal').textContent = contacts.length;
+  document.getElementById('cContacted').textContent = counts.contacted + counts.replied;
+  document.getElementById('cDemo').textContent = counts.demo;
+  document.getElementById('cTrial').textContent = counts.trial;
+  document.getElementById('cPaidStat').textContent = counts.paid;
+  document.getElementById('cDead').textContent = counts.dead;
+
+  const tbody = document.getElementById('contactBody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr id="emptyRow"><td colspan="9" style="text-align:center;color:var(--muted);padding:32px;font-size:13px;">${contacts.length === 0 ? 'No contacts yet. Add your first one above.' : 'No contacts match your search.'}</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(c => `
+    <tr>
+      <td style="font-weight:500;white-space:nowrap;">${esc(c.name)}</td>
+      <td style="color:var(--muted);white-space:nowrap;">${esc(c.company)}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;white-space:nowrap;">${esc(c.phone)}</td>
+      <td style="white-space:nowrap;"><span style="font-size:11px;color:var(--muted);">${esc(c.channel)}</span></td>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${esc(c.size)}</td>
+      <td>
+        <select class="contact-table select" onchange="updateStatus(${c.id}, this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 6px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+          ${Object.entries(statusLabels).map(([val, label]) =>
+            `<option value="${val}" ${c.status === val ? 'selected' : ''}>${label}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td class="notes-cell" title="${esc(c.notes)}">${esc(c.notes)}</td>
+      <td style="font-size:11px;color:var(--muted);white-space:nowrap;">${esc(c.date)}</td>
+      <td><button class="del-btn" onclick="deleteContact(${c.id})">×</button></td>
+    </tr>
+  `).join('');
+}
+
+function esc(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleForm() {
+  const form = document.getElementById('addForm');
+  const btn = form.querySelector('.form-toggle-btn');
+  const grid = form.querySelector('.form-grid');
+  const actions = form.querySelector('.add-btn')?.parentElement;
+  const isHidden = grid.style.display === 'none';
+  grid.style.display = isHidden ? 'grid' : 'none';
+  if (actions) actions.style.display = isHidden ? 'flex' : 'none';
+  btn.textContent = isHidden ? '− Collapse' : '+ Add Contact';
+}
+
+function exportCSV() {
+  if (contacts.length === 0) { alert('No contacts to export yet.'); return; }
+  const headers = ['Name','Company','Phone','Channel','Size','Status','Notes','Date'];
+  const rows = contacts.map(c => [
+    c.name, c.company, c.phone, c.channel, c.size,
+    statusLabels[c.status] || c.status, c.notes, c.date
+  ].map(v => `"${(v||'').replace(/"/g,'""')}"`));
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'oneserv_contacts_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// Init
+setTimeout(() => { document.getElementById('urgFill').style.width = '3%'; }, 300);
+buildDebriefList();
+renderContacts();
+renderFollowUps();
+renderWwBoards();
+</script>
+</body>
+</html>
