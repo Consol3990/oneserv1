@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OneServ Flyer — Print Ready</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#d0d0d0;
+    display:flex; flex-direction:column; align-items:center;
+    padding:30px 20px; font-family:'Barlow',sans-serif;
+  }
+  .print-note {
+    background:#fff; border:2px solid #ff6b1a; border-radius:8px;
+    padding:10px 20px; margin-bottom:20px; font-size:13px; color:#333;
+    text-align:center; max-width:8.5in; width:100%;
+  }
+  .print-note strong { color:#ff6b1a; }
+  @media print {
+    body { background:white; padding:0; }
+    .print-note { display:none; }
+    .flyer { box-shadow:none !important; }
+  }
+  .flyer {
+    width:8.5in; height:11in;
+    background:#0a0f1e;
+    position:relative; overflow:hidden;
+    box-shadow:0 8px 40px rgba(0,0,0,0.35);
+    display:flex; flex-direction:column;
+  }
+  .flyer::before {
+    content:''; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(26,86,255,0.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(26,86,255,0.05) 1px,transparent 1px);
+    background-size:44px 44px; pointer-events:none; z-index:0;
+  }
+  .inner {
+    position:relative; z-index:1;
+    padding:0.38in 0.5in 0.22in;
+    display:flex; flex-direction:column; flex:1; gap:0.22in;
+  }
+  .top-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:9px; border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .logo-row { display:flex; align-items:center; gap:10px; }
+  .logo-badge {
+    width:40px; height:40px; background:#1a56ff; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:21px; color:white;
+  }
+  .logo-text { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:26px; color:white; line-height:1; }
+  .logo-text span { color:#ff6b1a; }
+  .logo-sub { font-size:9px; color:#7a8499; letter-spacing:.1em; text-transform:uppercase; margin-top:2px; }
+  .built-pill {
+    background:rgba(26,86,255,0.12); border:1px solid rgba(26,86,255,0.28); border-radius:100px;
+    padding:5px 13px; font-size:9.5px; font-weight:600; color:#7aa8ff; letter-spacing:.07em; text-transform:uppercase;
+  }
+  .headline { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:62px; line-height:.93; color:white; text-transform:uppercase; }
+  .headline .org { color:#ff6b1a; }
+  .headline .blu { color:#4f80ff; }
+  .sub { font-size:13.5px; color:#8a93aa; line-height:1.45; margin-top:7px; }
+  .sub strong { color:white; }
+  .div-line { height:2px; background:linear-gradient(90deg,#ff6b1a,rgba(255,107,26,0)); border-radius:2px; flex-shrink:0; }
+  .feats { display:grid; grid-template-columns:repeat(6,1fr); gap:11px; }
+  .feat {
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+    border-radius:8px; padding:14px 14px; grid-column:span 2;
+  }
+  .feat-dot { width:6px; height:6px; background:#1a56ff; border-radius:50%; margin-bottom:7px; }
+  .feat-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; color:white; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .feat-desc { font-size:11px; color:#a0abbe; line-height:1.35; }
+  .comp { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+  .comp-col { border-radius:8px; padding:15px 17px; }
+  .comp-col.them { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); }
+  .comp-col.us { background:rgba(26,86,255,0.1); border:1px solid rgba(26,86,255,0.3); }
+  .comp-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:9px; }
+  .comp-col.them .comp-label { color:#7a8499; }
+  .comp-col.us .comp-label { color:#6fa3ff; }
+  .ci { display:flex; align-items:flex-start; gap:6px; font-size:12px; line-height:1.35; margin-bottom:6px; }
+  .comp-col.them .ci { color:#8a94ae; }
+  .comp-col.us .ci { color:#d0e0ff; }
+  .cx { color:#ff5f5e; font-weight:700; flex-shrink:0; font-size:11.5px; }
+  .ck { color:#3dd68c; font-weight:700; flex-shrink:0; font-size:11.5px; }
+  .bottom-boxes { display:grid; grid-template-columns:1.15fr 1fr; gap:11px; }
+  .offer-box {
+    background:linear-gradient(135deg,rgba(255,107,26,0.1),rgba(255,107,26,0.04));
+    border:1px solid rgba(255,107,26,0.3); border-radius:9px;
+    padding:16px 17px; display:flex; gap:13px; align-items:flex-start;
+  }
+  .offer-fire { font-size:26px; flex-shrink:0; line-height:1; margin-top:1px; }
+  .offer-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:15px; color:#ff6b1a; text-transform:uppercase; letter-spacing:.04em; margin-bottom:5px; }
+  .offer-desc { font-size:11.5px; color:#c89870; line-height:1.4; }
+  .offer-desc strong { color:white; }
+  .ref-box {
+    background:rgba(61,214,140,0.05); border:1px solid rgba(61,214,140,0.22);
+    border-radius:9px; padding:16px 17px; display:flex; gap:13px; align-items:flex-start;
+  }
+  .ref-icon { font-size:26px; flex-shrink:0; line-height:1; margin-top:1px; }
+  .ref-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:15px; color:#3dd68c; text-transform:uppercase; letter-spacing:.04em; margin-bottom:5px; }
+  .ref-desc { font-size:11.5px; color:#7ab890; line-height:1.4; }
+  .ref-desc strong { color:white; }
+  .cta-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+    border-radius:9px; padding:16px 20px;
+  }
+  .cta-price { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:46px; color:white; line-height:1; }
+  .cta-price span { font-size:20px; color:#7a8499; font-weight:400; }
+  .cta-trial { font-size:11px; color:#9aa3b8; margin-top:3px; }
+  .cta-trial strong { color:#3dd68c; }
+  .cta-mid { text-align:center; }
+  .cta-url { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:26px; color:#4f80ff; letter-spacing:.02em; text-transform:uppercase; }
+  .cta-phone { font-size:14px; color:#9aa3b8; margin-top:3px; }
+  .cta-scan { font-size:10px; color:#444e66; text-transform:uppercase; letter-spacing:.07em; margin-top:4px; }
+  .cta-qr { background:white; border-radius:8px; padding:6px; width:74px; height:74px; display:flex; align-items:center; justify-content:center; }
+  .cta-qr img { width:62px; height:62px; }
+  .flyer-footer {
+    background:rgba(0,0,0,0.25); padding:6px 0.48in;
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px solid rgba(255,255,255,0.04); position:relative; z-index:1; flex-shrink:0;
+  }
+  .flyer-footer span { font-size:9px; color:#2d3450; }
+</style>
+</head>
+<body>
+
+<div class="print-note">
+  <strong>Print:</strong> Open in Chrome → Ctrl+P → Paper: Letter → Margins: None → ✓ Background graphics → Print
+</div>
+
+<div class="flyer">
+  <div class="inner">
+
+    <div class="top-bar">
+      <div class="logo-row">
+        <div class="logo-badge">1</div>
+        <div>
+          <div class="logo-text">One<span>Serv</span></div>
+          <div class="logo-sub">Field Service Management</div>
+        </div>
+      </div>
+      <div class="built-pill">Built by a working plumber · Trusted Plumbing &amp; Water Heaters · Tucson, AZ</div>
+    </div>
+
+    <div>
+      <div class="headline">Stop Paying <span class="org">$300/Month</span> To Be <span class="blu">Frustrated.</span></div>
+      <p class="sub">I run <strong>Trusted Plumbing &amp; Water Heaters</strong> in Arizona. Got fed up paying HouseCall Pro and ServiceTitan add-on fees for features that should've been included — so I built my own app. <strong>One flat price. Everything included. Built for the trades.</strong></p>
+    </div>
+
+    <div class="div-line"></div>
+
+    <div class="feats">
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">Instant Dispatch</div><div class="feat-desc">Job created and tech rolling in under 60 seconds</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">5-Step Invoice</div><div class="feat-desc">Estimate to signed invoice before you leave the driveway</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">Sales Presentation</div><div class="feat-desc">Good/better/best on a tablet — close bigger jobs on site</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">Built-In Financing</div><div class="feat-desc">Customers say yes more when they see the payment</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">Mobile-First</div><div class="feat-desc">Your techs will actually use it — built for the field</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-title">No Add-On Fees</div><div class="feat-desc">One flat price. Everything included. No surprises.</div></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-col them">
+        <div class="comp-label">HouseCall Pro / ServiceTitan</div>
+        <div class="ci"><span class="cx">✗</span> $200–$600+/month with add-ons</div>
+        <div class="ci"><span class="cx">✗</span> 6–12 month contracts you can't escape</div>
+        <div class="ci"><span class="cx">✗</span> Weeks of onboarding and training calls</div>
+        <div class="ci"><span class="cx">✗</span> Built for enterprise, not your crew</div>
+        <div class="ci"><span class="cx">✗</span> Support tickets and hold music</div>
+      </div>
+      <div class="comp-col us">
+        <div class="comp-label">OneServ</div>
+        <div class="ci"><span class="ck">✓</span> $79–$249/month — everything included</div>
+        <div class="ci"><span class="ck">✓</span> Month-to-month — cancel anytime</div>
+        <div class="ci"><span class="ck">✓</span> Live same day — no training calls needed</div>
+        <div class="ci"><span class="ck">✓</span> Built by Dutch — owner of Trusted Plumbing AZ</div>
+        <div class="ci"><span class="ck">✓</span> Call Dutch directly — 520-444-7488</div>
+      </div>
+    </div>
+
+    <div class="bottom-boxes">
+      <div class="offer-box">
+        <div class="offer-fire">🔥</div>
+        <div>
+          <div class="offer-title">First 100 Signups Get My Plumbing Pricebook Free</div>
+          <div class="offer-desc"><strong>Photos · 3-option pricing · Bundles.</strong> Water heaters, drain work, fixtures, leak repair. The actual pricebook I use at Trusted Plumbing every day — not a template. Pro &amp; Business plans only. Once I hit 100 this offer closes for good.</div>
+        </div>
+      </div>
+      <div class="ref-box">
+        <div class="ref-icon">💰</div>
+        <div>
+          <div class="ref-title">Refer Someone — Get $30 Cash</div>
+          <div class="ref-desc">Know a plumber, HVAC tech, or electrician? Send them to <strong>go.oneserv.app</strong> and have them mention your name when they sign up. <strong>$30 cash for every paid customer you send my way.</strong> No limit on referrals. Call or text Dutch: <strong>520-444-7488</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-bar">
+      <div>
+        <div class="cta-price">$79<span>/mo</span></div>
+        <div class="cta-trial"><strong>14-day free trial</strong> · No credit card · Cancel anytime</div>
+      </div>
+      <div class="cta-mid">
+        <div class="cta-url">go.oneserv.app</div>
+        <div class="cta-phone">Dutch Conner · 520-444-7488</div>
+        <div class="cta-scan">Scan to start your free trial</div>
+      </div>
+      <div class="cta-qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=58x58&data=https://go.oneserv.app&color=0a0f1e&bgcolor=ffffff" alt="QR">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flyer-footer">
+    <span>OneServ · Consolidated Assets LLC · Tucson, Arizona</span>
+    <span>Launching April 14, 2026 · Plumbing · HVAC · Electrical</span>
+  </div>
+</div>
+
+</body>
+</html>
