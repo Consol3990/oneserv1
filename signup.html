@@ -578,7 +578,30 @@
         }).catch(() => {}); // silent — don't block redirect if table doesn't exist yet
       }
 
-      // ── 3. Redirect to welcome page ───────────────────────────────────────
+// ── 3. Create company_settings row ───────────────────────────────────
+      if (token && authData.user?.id) {
+        await fetch(`${SUPABASE_URL}/rest/v1/company_settings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey':        SUPABASE_ANON,
+            'Authorization': `Bearer ${token}`,
+            'Prefer':        'return=minimal'
+          },
+          body: JSON.stringify({
+            user_id:          authData.user.id,
+            name:             businessName,
+            phone:            phone,
+            owner_name:       `${firstName} ${lastName}`,
+            trade:            trade,
+            plan:             'trial',
+            primary_color:    '#1e3a5f',
+            trial_started_at: new Date().toISOString(),
+          })
+        });
+      }
+
+      // ── 4. Redirect to welcome page ───────────────────────────────────────
       window.location.href = 'https://go.oneserv.app/welcome.html';
 
     } catch (err) {
