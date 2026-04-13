@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneServ — Focused Marketing Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080d1a; --surface:#0d1425; --surface2:#111b30; --border:rgba(255,255,255,0.07);
+  --accent:#1a56ff; --accent2:#4f80ff; --green:#3dd68c; --orange:#ff6b1a;
+  --teal:#00c9b1; --purple:#a78bfa; --red:#f87171; --amber:#fbbf24;
+  --text:#e2e8f0; --muted:#64748b; --dim:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;line-height:1.6;}
+.header{background:linear-gradient(135deg,#0d1425,#0a1535);border-bottom:1px solid var(--border);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo-row{display:flex;align-items:center;gap:12px;}
+.logo-badge{width:40px;height:40px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:white;}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;color:white;}
+.logo-text span{color:var(--orange);}
+.doc-sub{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.focused-badge{background:rgba(61,214,140,0.1);border:1px solid rgba(61,214,140,0.25);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;}
+.tab-nav{display:flex;gap:4px;padding:14px 32px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;flex-wrap:wrap;}
+.tab-btn{background:transparent;border:1px solid transparent;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:'Barlow',sans-serif;letter-spacing:.04em;text-transform:uppercase;transition:all .2s;}
+.tab-btn:hover{color:var(--text);border-color:var(--border);}
+.tab-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+.panel{display:none;padding:32px;max-width:1000px;}
+.panel.active{display:block;}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.sec-badge{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+.badge-blue{background:rgba(26,86,255,0.15);color:var(--accent2);}
+.badge-green{background:rgba(61,214,140,0.12);color:var(--green);}
+.badge-orange{background:rgba(255,107,26,0.12);color:var(--orange);}
+.badge-purple{background:rgba(167,139,250,0.12);color:var(--purple);}
+.badge-teal{background:rgba(0,201,177,0.12);color:var(--teal);}
+.badge-amber{background:rgba(251,191,36,0.12);color:var(--amber);}
+.sec-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:white;letter-spacing:.01em;}
+.sec-desc{font-size:13px;color:var(--dim);line-height:1.6;margin-bottom:20px;}
+.tip{border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:13px;line-height:1.55;}
+.tip-green{background:rgba(61,214,140,0.06);border:1px solid rgba(61,214,140,0.18);color:#86efac;}
+.tip-blue{background:rgba(26,86,255,0.08);border:1px solid rgba(26,86,255,0.2);color:#93c5fd;}
+.tip-orange{background:rgba(255,107,26,0.08);border:1px solid rgba(255,107,26,0.2);color:#fdba74;}
+.tip-amber{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);color:#fde68a;}
+.tip-purple{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:#c4b5fd;}
+.tip-red{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:#fca5a5;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:white;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+.card-sub{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.card-body{font-size:12.5px;color:var(--dim);line-height:1.5;}
+.copy-block{background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden;}
+.copy-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);}
+.copy-title{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.copy-btn{background:rgba(26,86,255,0.15);border:1px solid rgba(26,86,255,0.3);border-radius:4px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--accent2);cursor:pointer;font-family:'Barlow',sans-serif;}
+.copy-btn:hover{background:rgba(26,86,255,0.25);}
+.copy-btn.copied{background:rgba(61,214,140,0.15);border-color:rgba(61,214,140,0.3);color:var(--green);}
+.copy-body{padding:16px;font-size:12.5px;color:var(--dim);line-height:1.7;white-space:pre-wrap;font-family:'Barlow',sans-serif;}
+.week{background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;}
+.week-head{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);}
+.week-badge{background:var(--accent);color:white;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:4px;white-space:nowrap;}
+.week-title{font-weight:600;font-size:13px;color:white;}
+.week-body{padding:14px 16px;font-size:12.5px;color:var(--dim);line-height:1.65;}
+.week-body li{margin-bottom:5px;padding-left:16px;position:relative;}
+.week-body li::before{content:'→';position:absolute;left:0;color:var(--accent2);font-size:11px;}
+.divider{height:1px;background:var(--border);margin:24px 0;}
+.daily-row{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.daily-row:last-child{border-bottom:none;}
+.daily-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent2);width:80px;flex-shrink:0;padding-top:2px;}
+.daily-task{flex:1;font-size:13px;color:var(--dim);line-height:1.5;}
+.daily-task strong{color:var(--text);}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;text-align:center;}
+.kpi-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:white;line-height:1;margin-bottom:4px;}
+.kpi-label{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;}
+h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;color:white;text-transform:uppercase;letter-spacing:.04em;margin:20px 0 10px;}
+h4{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 8px;}
+.pillar{border-radius:10px;padding:18px 20px;margin-bottom:12px;border:1px solid;}
+.pillar-1{background:rgba(26,86,255,0.06);border-color:rgba(26,86,255,0.2);}
+.pillar-2{background:rgba(61,214,140,0.05);border-color:rgba(61,214,140,0.2);}
+.pillar-3{background:rgba(255,107,26,0.06);border-color:rgba(255,107,26,0.2);}
+.pillar-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.pillar-1 .pillar-label{color:var(--accent2);}
+.pillar-2 .pillar-label{color:var(--green);}
+.pillar-3 .pillar-label{color:var(--orange);}
+.pillar-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:white;margin-bottom:6px;}
+.pillar-body{font-size:12.5px;color:var(--dim);line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-row">
+    <div class="logo-badge">1</div>
+    <div>
+      <div class="logo-text">One<span>Serv</span></div>
+      <div class="doc-sub">Focused Marketing Kit — 3 Channels Only</div>
+    </div>
+  </div>
+  <div class="focused-badge">Signal Over Noise</div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('plan')">Daily Plan</button>
+  <button class="tab-btn" onclick="showTab('linkedin')">LinkedIn Strategy</button>
+  <button class="tab-btn" onclick="showTab('lipost')">LI Post Templates</button>
+  <button class="tab-btn" onclick="showTab('email')">Email Sequences</button>
+  <button class="tab-btn" onclick="showTab('texts')">Text Scripts</button>
+  <button class="tab-btn" onclick="showTab('jv')">JV Outreach</button>
+  <button class="tab-btn" onclick="showTab('tracker')">Weekly Tracker</button>
+</div>
+
+<!-- ══════════════════ DAILY PLAN ══════════════════ -->
+<div class="panel active" id="panel-plan">
+  <div class="sec-head">
+    <span class="sec-badge badge-green">Focus</span>
+    <span class="sec-title">The Only 3 Channels That Matter Right Now</span>
+  </div>
+  <p class="sec-desc">Everything else is noise. These 3 channels, executed daily with discipline, will get you to 100 paid users faster than 10 channels executed poorly.</p>
+
+  <div class="grid3">
+    <div class="card">
+      <div class="card-sub">Channel 1</div>
+      <div class="card-title">LinkedIn</div>
+      <div class="card-body">3–5 posts per week. Build authority. Grow network. Convert profile visitors to signups. Compounding — gets stronger every week you stay consistent.</div>
+    </div>
+    <div class="card">
+      <div class="card-sub">Channel 2</div>
+      <div class="card-title">Email + Text</div>
+      <div class="card-body">Outscraper list + Instantly.ai for email. Salesmsg for text once A2P approves. Automated sequences. Runs while you sleep. Direct and measurable.</div>
+    </div>
+    <div class="card">
+      <div class="card-sub">Channel 3</div>
+      <div class="card-title">JV Partnership</div>
+      <div class="card-body">Full first month payout. Pilot offer. Demo video. One great JV partner can deliver 50 signups from a single mention. Highest leverage of the three.</div>
+    </div>
+  </div>
+
+  <div class="tip tip-amber">
+    <strong>The Rule:</strong> If an activity doesn't fit into one of these 3 channels — don't do it this month. Facebook engagement posts, Alignable, Reddit, cold calls, supply houses — all paused. Focus compounds. Scattered effort doesn't.
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Daily Execution Schedule</h3>
+  <p class="sec-desc" style="margin-bottom:16px;">90 minutes per day total. Non-negotiable. Everything else is Trusted Plumbing time.</p>
+
+  <div class="week">
+    <div class="week-head"><span class="week-badge" style="background:var(--accent2);">Morning · 30 min</span><span class="week-title">LinkedIn — Every Weekday</span></div>
+    <div class="week-body">
+      <div class="daily-row"><div class="daily-time">7:00 AM</div><div class="daily-task"><strong>Post one piece of content</strong> — use templates from LI Post Templates tab. Takes 10 minutes if you use the formulas.</div></div>
+      <div class="daily-row"><div class="daily-time">7:10 AM</div><div class="daily-task"><strong>Respond to all comments</strong> on yesterday's post. Within 2 hours of posting is the LinkedIn algorithm sweet spot.</div></div>
+      <div class="daily-row"><div class="daily-time">7:20 AM</div><div class="daily-task"><strong>Comment on 5 posts</strong> from trades owners, podcast hosts, or group admins you want to connect with. Minimum 3 sentences per comment — not "great post."</div></div>
+      <div class="daily-row"><div class="daily-time">7:25 AM</div><div class="daily-task"><strong>Send 5 connection requests</strong> to qualified targets — podcast hosts, newsletter writers, trades business owners, group admins.</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head"><span class="week-badge" style="background:var(--green);">Midday · 30 min</span><span class="week-title">Email + Text — Every Weekday</span></div>
+    <div class="week-body">
+      <div class="daily-row"><div class="daily-time">12:00 PM</div><div class="daily-task"><strong>Check Instantly.ai</strong> — review replies, move interested prospects to demo queue. Reply to anyone who responded within same day.</div></div>
+      <div class="daily-row"><div class="daily-time">12:10 PM</div><div class="daily-task"><strong>Personal follow-up emails</strong> — send to any trial user who hasn't logged in. Use email templates from Email tab. Max 5 per day, personalized.</div></div>
+      <div class="daily-row"><div class="daily-time">12:20 PM</div><div class="daily-task"><strong>Text follow-ups</strong> (once Salesmsg A2P approves) — warm leads only. Use text scripts from Text Scripts tab.</div></div>
+      <div class="daily-row"><div class="daily-time">12:25 PM</div><div class="daily-task"><strong>Check signups</strong> — any new trial users get a personal call or text within 2 hours of signing up.</div></div>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head"><span class="week-badge" style="background:var(--orange);">Afternoon · 30 min</span><span class="week-title">JV Outreach — Every Weekday</span></div>
+    <div class="week-body">
+      <div class="daily-row"><div class="daily-time">3:00 PM</div><div class="daily-task"><strong>5 new JV partner DMs or emails</strong> — use JV Outreach tab. Mix of Facebook admins, podcast hosts, newsletter writers, YouTube creators.</div></div>
+      <div class="daily-row"><div class="daily-time">3:15 PM</div><div class="daily-task"><strong>Follow up on existing JV conversations</strong> — check responses, advance conversations toward pilot agreement.</div></div>
+      <div class="daily-row"><div class="daily-time">3:25 PM</div><div class="daily-task"><strong>Onboard any new JV partners</strong> — deliver assets, create referral link, send partner kit. Target: partner first promotion within 5 days of agreement.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Weekly Focus by Day</h3>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Monday</span><span class="week-title">Content Batch Day + JV Follow-Ups</span></div>
+    <div class="week-body"><ul>
+      <li>Write all 5 LinkedIn posts for the week in one sitting — 45 minutes, use the templates</li>
+      <li>Schedule posts using LinkedIn native scheduler (free)</li>
+      <li>Follow up on all JV conversations from previous week</li>
+      <li>Check Instantly.ai stats — open rate, reply rate, sequence performance</li>
+    </ul></div>
+  </div>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Tuesday</span><span class="week-title">New JV Outreach Wave</span></div>
+    <div class="week-body"><ul>
+      <li>Send Email 1 to 10 new JV targets — podcast hosts, newsletter writers, group admins</li>
+      <li>LinkedIn connection requests to 10 qualified prospects</li>
+      <li>Post LinkedIn content + engage for 20 minutes</li>
+    </ul></div>
+  </div>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Wednesday</span><span class="week-title">Demo + Conversion Day</span></div>
+    <div class="week-body"><ul>
+      <li>Schedule and run any demos with interested prospects or JV partners</li>
+      <li>Follow up on all trial users who haven't logged in</li>
+      <li>Post LinkedIn content + engage</li>
+      <li>Send JV Email 2 (pilot pivot) to non-responders from Tuesday wave</li>
+    </ul></div>
+  </div>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Thursday</span><span class="week-title">Partner Nurture + Email Check</span></div>
+    <div class="week-body"><ul>
+      <li>Send weekly report to all active JV partners</li>
+      <li>Review Instantly.ai — reply to any email sequence responses</li>
+      <li>Post LinkedIn content + engage</li>
+      <li>New JV outreach batch — 5 targets</li>
+    </ul></div>
+  </div>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Friday</span><span class="week-title">Review + Plan Next Week</span></div>
+    <div class="week-body"><ul>
+      <li>Update weekly tracker with numbers (see Tracker tab)</li>
+      <li>Identify what's working — double down on it next week</li>
+      <li>Send JV Email 3 (final) to non-responders from Tuesday wave</li>
+      <li>Post LinkedIn content — Friday is great for personal/story posts</li>
+      <li>Plan Monday content batch</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════════ LINKEDIN STRATEGY ══════════════════ -->
+<div class="panel" id="panel-linkedin">
+  <div class="sec-head">
+    <span class="sec-badge badge-blue">Channel 1</span>
+    <span class="sec-title">LinkedIn Strategy — Full Playbook</span>
+  </div>
+  <p class="sec-desc">Based on the Postiv.ai founder's guide. LinkedIn is your highest-leverage free channel. Consistency beats virality. The algorithm rewards you for showing up every day.</p>
+
+  <div class="tip tip-blue">
+    <strong>The Math That Matters (from the article):</strong> Post 3–5x per week. Each post reaches 50–100 people in your network. 5–10 engage. LinkedIn shows it to their networks (500–1,000 more views). 2–3 click your profile. 1 signs up. Do this consistently for 60 days = 40–80 organic signups per month. Zero ad spend. After 6 months those same posts can generate 50–100 signups each as your network grows.
+  </div>
+
+  <h3>Profile Optimization — Do This First</h3>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-sub">Your Headline Formula</div>
+    <div class="card-title" style="margin-bottom:10px;">Result + Audience + App + Credibility</div>
+    <div class="copy-block" style="margin-bottom:0;">
+      <div class="copy-header"><span class="copy-title">Recommended Headline</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">Helping Plumbing & HVAC Companies Dispatch Faster and Invoice on Site | Founder of OneServ FSM | Author of Charge What You're Worth | Owner, Trusted Plumbing & Water Heaters</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-sub">About Section — 5-Paragraph Formula</div>
+    <div class="copy-block" style="margin-bottom:0;">
+      <div class="copy-header"><span class="copy-title">Full About Section</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+      <div class="copy-body">If you own a plumbing, HVAC, or electrical company, you already know the software problem. You signed up for HouseCall Pro or ServiceTitan, paid the onboarding fee, sat through the training calls — and two months later you're still paying $280/month in add-ons for features that should've been included from day one.
+
+I've been in the trades my entire career. I own Trusted Plumbing & Water Heaters in Tucson, Arizona — running service trucks every day. A few years ago I wrote Charge What You're Worth — Home Services Edition because I was watching great plumbers and HVAC techs undercharge for their work and wonder why they couldn't get ahead.
+
+Then I realized the software was making it worse. The tools we had were built for Fortune 500 companies, not a 3-truck shop. So I built my own.
+
+OneServ is a mobile-first field service management app for plumbing, HVAC, and electrical companies with 1–10 technicians. Dispatch a job in under 60 seconds. Build a good/better/best invoice on site. Offer financing at the door. Get paid before you leave the driveway. Flat $79–$249/month — everything included. No add-ons. No contracts. Setup in 30 minutes.
+
+If you're a trades business owner tired of overpaying for software that wasn't built for the field — I built this for you. Try it free at go.oneserv.app or call me directly: 520-444-7488. I personally onboard every new user.</div>
+    </div>
+  </div>
+
+  <div class="tip tip-green">
+    <strong>Featured Section — 3 items in this order:</strong><br><br>
+    1. go.oneserv.app — with thumbnail of the app or logo<br>
+    2. Your book on Amazon/Gumroad — with book cover image<br>
+    3. Your best-performing LinkedIn post once you have one
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>The 3-Pillar Content System</h3>
+  <p class="sec-desc">Every post fits into one of three pillars. Never post randomly. This builds a consistent identity that compounds over time.</p>
+
+  <div class="pillar pillar-1">
+    <div class="pillar-label">Pillar 1 · 40% of posts · Mon + Thu</div>
+    <div class="pillar-title">Domain Expertise — No App Mention</div>
+    <div class="pillar-body">Teach trades business owners something valuable about running their business. Pricing, dispatch efficiency, tech management, getting paid faster, closing bigger jobs. Don't mention OneServ. Just provide value. This builds authority and attracts your exact target audience.<br><br>
+    Examples: "5 reasons your techs aren't closing at the door." / "Why flat-rate pricing beats hourly for plumbing companies." / "The one thing that kills cash flow in trades businesses." / "How I reduced our no-shows by 60%."</div>
+  </div>
+
+  <div class="pillar pillar-2">
+    <div class="pillar-label">Pillar 2 · 40% of posts · Tue + Fri</div>
+    <div class="pillar-title">Building Journey — Authentic Stories</div>
+    <div class="pillar-body">Document what you're learning building OneServ. Wins, mistakes, lessons, numbers. These perform best because they're real and relatable. Other founders and business owners engage — expanding your network with exactly the right people.<br><br>
+    Examples: "We had 4 signups and the login page was broken. Here's what I learned." / "I visited 4 supply houses last week to hand out flyers. Here's what happened." / "Why I wrote a book before I built software." / "OneServ hit [X] users. Here's what actually moved the needle."</div>
+  </div>
+
+  <div class="pillar pillar-3">
+    <div class="pillar-label">Pillar 3 · 20% of posts · Wed</div>
+    <div class="pillar-title">Subtle Product Marketing — Transformation Focus</div>
+    <div class="pillar-body">Talk about OneServ — but focus on the transformation, not features. Customer story. Before/after. Problem solved. Use case walkthrough. Never lead with features. Always lead with the pain it removes.<br><br>
+    Examples: "A plumber in [city] switched from HCP last week. Here's what changed." / "What happens when a tech can close a $4,000 job on site instead of calling the office." / "The difference between a signed invoice and 'I'll think about it.'"</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>LinkedIn Post Formula — Every Post Follows This Structure</h3>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-body" style="font-size:13px;line-height:1.7;">
+      <strong style="color:white;">Line 1 — The Hook</strong><br>
+      One sentence. Bold claim, surprising fact, or relatable question. This is the only thing people see before they click "see more." Make them click.<br><br>
+      <strong style="color:white;">Lines 2–4 — Context</strong><br>
+      Set up the problem or situation. Make it relatable. Keep sentences short — 1 line each. White space is your friend on LinkedIn.<br><br>
+      <strong style="color:white;">Body — The Value</strong><br>
+      Numbered list, bullet points, or short paragraphs. Max 2–3 lines per paragraph. Never write a wall of text.<br><br>
+      <strong style="color:white;">Closing — Soft CTA</strong><br>
+      Invite engagement OR offer a next step. Never hard sell. "What's worked for you?" or "Try it free: go.oneserv.app" — not both.<br><br>
+      <strong style="color:white;">Hashtags</strong><br>
+      3–5 max. #plumbing #fieldservice #homeservice #trades #HVAC
+    </div>
+  </div>
+
+  <h3>Connection Growth Strategy</h3>
+  <div class="grid2">
+    <div class="tip tip-blue">
+      <strong>Who to connect with (10/day):</strong><br><br>
+      · Trades business owners — plumbing, HVAC, electrical<br>
+      · Podcast hosts in blue collar / home service space<br>
+      · Newsletter writers serving trades audience<br>
+      · Facebook group admins you want to JV with<br>
+      · Business coaches serving home service companies<br>
+      · Supply house reps and territory managers
+    </div>
+    <div class="tip tip-green">
+      <strong>Connection request note (keep it short):</strong><br><br>
+      "Hey [Name] — Dutch Conner here, plumber and founder of OneServ field service software. Also authored Charge What You're Worth for home service owners. Would love to connect — think we're in the same space."<br><br>
+      OR just connect without a note — acceptance rate is similar and it's faster.
+    </div>
+  </div>
+
+  <h3>Engagement Strategy — 15 Minutes Per Day</h3>
+  <div class="tip tip-orange">
+    <strong>The comment that actually works:</strong> Find a post from your target audience with fewer than 10 comments. Leave a 3–5 sentence comment that adds your own experience or perspective and ends with a question. Bad: "Great post! Totally agree." Good: "This hits home. I ran Trusted Plumbing for years before figuring this out — and the moment we switched to flat-rate pricing our close rate went up 40%. The hardest part wasn't the pricing. It was getting techs to present it confidently at the door. How are you handling that part?"<br><br>
+    The good comment gets you clicks to your profile from everyone else who reads it. That's free marketing.
+  </div>
+
+  <h3>Posting Schedule</h3>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Best Times</span><span class="week-title">Post at 7–9 AM or 12–1 PM CST/MST Tuesday–Thursday</span></div>
+    <div class="week-body"><ul>
+      <li>Monday — Batch write all 5 posts for the week (45 min). Schedule them all at once.</li>
+      <li>Tuesday — Expertise post (Pillar 1). Best day for reach.</li>
+      <li>Wednesday — Product post (Pillar 3). Mid-week works for soft CTAs.</li>
+      <li>Thursday — Building journey post (Pillar 2). High engagement day.</li>
+      <li>Friday — Expertise or building journey. Friday = personal storytelling performs well.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════════ LI POST TEMPLATES ══════════════════ -->
+<div class="panel" id="panel-lipost">
+  <div class="sec-head">
+    <span class="sec-badge badge-blue">Channel 1</span>
+    <span class="sec-title">LinkedIn Post Templates</span>
+  </div>
+  <p class="sec-desc">20 ready-to-post templates across all 3 pillars. Customize the specifics and post. Each one follows the proven hook → context → value → CTA formula.</p>
+
+  <h3>Pillar 1 — Domain Expertise Posts (No App Mention)</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Expertise Post 1 · Pricing</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Your plumbing tech is leaving $500 on the table at every service call.
+
+Not because he's bad at his job.
+Because he's only showing customers one option.
+
+Here's what I learned after 20 years in the trades:
+
+Customers don't buy the cheapest option. They buy the option that makes them feel safe.
+
+When you show good/better/best:
+→ 60% choose the middle option
+→ 20% choose the premium option
+→ Only 20% choose the base option
+
+Before we built this into our workflow, every job was a negotiation. After — it was a presentation.
+
+The tech stops being a plumber and starts being a trusted advisor.
+
+What's your average close rate on first visit right now?
+
+#plumbing #hvac #homeservice #trades #fieldservice</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Expertise Post 2 · Getting Paid</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">The worst thing a plumber can say at the end of a job:
+
+"I'll send you an invoice."
+
+Here's what that actually means:
+→ You're now a collections department
+→ Your cash flow just got pushed 30 days
+→ The customer has time to find reasons not to pay full price
+
+20 years in the trades taught me one thing about money:
+
+Get paid before you leave the driveway.
+
+Not because customers are dishonest.
+Because the moment you leave, the urgency disappears.
+
+The signed invoice and the payment happen in the same 60 seconds — or you're playing a different game.
+
+How long does it take your techs to collect payment after a job is done?
+
+#plumbing #hvac #trades #fieldservice #cashflow</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Expertise Post 3 · Software Cost</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">I added up my HouseCall Pro bill one day.
+
+Base plan: $149
+Pricebook add-on: $39
+Financing integration: $29
+Marketing tools: $49
+Extra user seat: $25
+
+Total: $291/month
+
+For a 3-truck plumbing shop.
+
+That's $3,492 per year for software.
+
+The question I kept asking myself:
+Is this software making me $3,492 more per year than a simpler alternative?
+
+For most small shops — the honest answer is no.
+
+You don't need enterprise software to run a 5-tech operation.
+You need fast dispatch, clean invoicing, and something your techs will actually use.
+
+What are you paying for field service software right now?
+
+#plumbing #hvac #homeservice #fieldservice #smallbusiness</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Expertise Post 4 · Tech Management</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">The #1 reason home service techs underperform:
+
+They don't know what's expected before they walk in the door.
+
+I've seen this pattern a hundred times:
+→ Tech gets a call slip with an address and a problem description
+→ Walks in cold with no customer history, no pricing context, no upsell path
+→ Does the minimum job and leaves
+
+Contrast that with:
+→ Tech gets the job with full customer history
+→ Sees what was done last visit and what was recommended but declined
+→ Walks in with pricing ready and 3 options loaded
+
+Same tech. Completely different result.
+
+The second scenario doesn't require a better tech.
+It requires better information flow.
+
+How are you preparing your techs before they walk in the door?
+
+#plumbing #hvac #homeservice #trades #teammanagement</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Expertise Post 5 · Financing</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">A customer said no to a $4,200 water heater replacement last week.
+
+Then my tech showed him the monthly payment.
+
+$127/month.
+
+He said yes.
+
+Same customer. Same job. Same price.
+
+The only thing that changed was how the number looked.
+
+Most home service companies are leaving financed jobs on the table every single day because their techs don't offer it — or they offer it at the end when the customer has already mentally said no.
+
+Financing needs to be part of the first presentation. Not a fallback.
+
+Have you built financing into your standard sales process yet?
+
+#plumbing #hvac #homeservice #trades #sales</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Pillar 2 — Building Journey Posts</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Journey Post 1 · Honest Launch Story</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">We had 4 signups and I found out the login page was broken.
+
+All 4 people signed up. Tried to log in. Hit a wall. Never got into the app.
+
+I called every single one of them personally.
+
+This is what launching a SaaS looks like when you're also running service trucks in Arizona.
+
+No growth team. No marketing department. Just Dutch with a phone and a list of 4 names.
+
+3 of the 4 answered. All 3 are going to try again now that it's fixed.
+
+1 number was bogus.
+
+Progress looks different than I expected.
+But it's still progress.
+
+Building in public — what's the most embarrassing launch mistake you've made?
+
+#buildinpublic #saas #founder #plumbing #oneserv</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Journey Post 2 · Book to Software</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">I wrote a book about charging correctly. Then I realized the software was the problem.
+
+Charge What You're Worth — Home Services Edition taught plumbers and HVAC companies how to price their work for profit.
+
+But I kept getting the same feedback:
+
+"I understand the pricing. I just can't execute it cleanly in the field."
+
+Good/better/best on a paper form. Financing explained verbally. Invoice emailed 3 days later.
+
+The pricing was right. The delivery system was broken.
+
+So I built the delivery system.
+
+OneServ isn't just dispatch software. It's the execution layer for everything the book teaches.
+
+Same problem. Same customer. Two products that feed each other.
+
+That's the business I didn't plan to build — but the one that made the most sense.
+
+#buildinpublic #founder #plumbing #saas #homeservice</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Journey Post 3 · Supply House Visit</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">I printed 30 flyers and walked into 4 supply houses last week.
+
+Van Marcke. Hajoca. Goodman. Ferguson.
+
+Not as a software founder.
+As Dutch Conner — the plumber they already know.
+
+That's the advantage nobody talks about when a trades owner builds a trades product.
+
+I'm not some guy from San Francisco pitching software to people who think plumbers charge too much.
+
+I'm a customer. I've been buying from these counters for 20 years.
+
+The conversation is completely different.
+
+The lesson: distribution is easier when you're already inside the market you're serving.
+
+Building something for an industry you're not in? That's a different game entirely.
+
+#founder #buildinpublic #plumbing #distribution #saas</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Journey Post 4 · Why I Built This</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Nobody builds software because they love software.
+
+They build it because they're sick of the existing options.
+
+I got tired of:
+→ Paying $291/month for HouseCall Pro with add-ons
+→ Watching my techs use the app wrong because it wasn't built for the field
+→ Chasing invoices that should have been signed on site
+→ Explaining our software to new hires for two weeks before they could use it
+
+So I built OneServ.
+
+Mobile-first. Dispatch in 60 seconds. Invoice closed on site. Flat $79/month.
+
+Built on real service calls. Not in a conference room.
+
+The irony is that the thing that was supposed to save me time now takes most of it.
+
+But at least it's my problem to solve.
+
+#founder #buildinpublic #plumbing #homeservice #oneserv</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Journey Post 5 · Momentum Update (fill in numbers)</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">OneServ update — week [X]:
+
+Signups: [X]
+Active trials: [X]
+Paid users: [X]
+JV partners in conversations: [X]
+LinkedIn connections added: [X]
+
+What moved the needle this week:
+→ [Specific thing that worked]
+→ [Second thing]
+
+What didn't work:
+→ [Honest thing that failed]
+
+What I'm doing differently next week:
+→ [Specific change]
+
+Building in public because accountability compounds.
+
+If you're building something in the trades space — drop a comment. Always want to connect with other founders solving real problems.
+
+#buildinpublic #founder #saas #plumbing #homeservice</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Pillar 3 — Product Posts (Soft CTA)</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Product Post 1 · The Switch</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">A plumbing company switched from HouseCall Pro to OneServ last week.
+
+First thing they said after their first job:
+
+"Why did we wait this long."
+
+Not because it has more features. It doesn't — yet.
+
+Because it's faster. And their techs actually use it.
+
+The best field service software isn't the one with the most features.
+It's the one your techs use without being told to.
+
+If you're on HCP or ServiceTitan and your team is still texting job info to each other — the software isn't the problem. The workflow is.
+
+OneServ is built around how trades techs actually work. Not how a product team thinks they work.
+
+14-day free trial — no credit card: go.oneserv.app
+
+#plumbing #hvac #fieldservice #homeservice #oneserv</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Product Post 2 · The Demo</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">I made a 5-minute video showing exactly what OneServ does.
+
+No slides. No voiceover. Just the app working on a real job.
+
+Here's what happens in 5 minutes:
+→ Customer calls in
+→ Job created and assigned to tech in under 60 seconds
+→ Tech builds good/better/best invoice on site
+→ Customer signs on the tablet
+→ Payment collected before tech leaves the driveway
+
+From dispatch to paid invoice — without calling the office once.
+
+This is what a 3-truck plumbing shop looks like when the software actually works.
+
+Video in the comments. Try it free: go.oneserv.app
+
+#plumbing #hvac #fieldservice #homeservice #dispatch</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Product Post 3 · The Pricing Post</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">OneServ pricing. No games.
+
+Starter: $79/month — 1 user
+Pro: $149/month — up to 5 users  
+Business: $249/month — up to 10 users
+
+Everything included. No add-ons. No per-user fees after your limit. No contract. Cancel anytime.
+
+Compare that to what you're paying now — add up every line on your current software invoice.
+
+Most shops I talk to are paying $200–$400/month when they add up all the add-ons.
+
+14-day free trial. Setup in 30 minutes. I personally onboard every new user.
+
+If you want to see it first: 5-minute demo at go.oneserv.app or call me directly at 520-444-7488.
+
+#plumbing #hvac #fieldservice #homeservice #oneserv</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Product Post 4 · The Pricebook Offer</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">First 100 Pro and Business signups get my complete plumbing pricebook free.
+
+Not a template. My actual pricebook.
+
+Photos. 3-option pricing. Water heaters, drain work, fixtures, leak repair.
+
+The one I use at Trusted Plumbing & Water Heaters every day.
+
+I wrote Charge What You're Worth to help trades owners price correctly.
+OneServ is the software to deliver it.
+The pricebook is the bridge between the two.
+
+[X] spots remaining.
+
+go.oneserv.app — Pro and Business plans only.
+
+#plumbing #hvac #homeservice #pricebook #trades</div>
+  </div>
+</div>
+
+<!-- ══════════════════ EMAIL SEQUENCES ══════════════════ -->
+<div class="panel" id="panel-email">
+  <div class="sec-head">
+    <span class="sec-badge badge-orange">Channel 2</span>
+    <span class="sec-title">Email Sequences</span>
+  </div>
+  <p class="sec-desc">Three separate sequences: cold outreach via Instantly.ai, trial user onboarding, and trial-ending conversion. Set these up once and they run automatically.</p>
+
+  <div class="tip tip-amber">
+    <strong>Email Infrastructure Checklist:</strong> Instantly.ai account set up ✓ · 3 sending domains purchased (tryoneserv.com, oneservapp.com, getoneserv.com) · Domains connected to Instantly · Warm-up running for 14 days before sending cold emails · Outscraper list cleaned and loaded · UTM parameters on all links
+  </div>
+
+  <h3>Sequence 1 — Cold Outreach (Instantly.ai · Plumbing/HVAC Owners)</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Cold Email 1 · Day 1 · The Hook</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: What are you paying for field service software?
+
+Hey [First Name],
+
+Quick question — what's your all-in monthly cost for your field service software right now?
+
+I ask because when I added up my HouseCall Pro bill — base plan plus every add-on — I was paying $291/month for a 3-truck plumbing shop.
+
+So I built my own.
+
+OneServ is a dispatch and invoicing app built specifically for plumbing and HVAC companies. I own Trusted Plumbing & Water Heaters in Tucson — this is the software I use on my own jobs every day.
+
+Flat $79–$249/month. Everything included. 14-day free trial.
+
+Worth a look: go.oneserv.app
+
+— Dutch Conner
+Founder, OneServ | Owner, Trusted Plumbing & Water Heaters
+520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Cold Email 2 · Day 4 · The Demo</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: 5-minute video — dispatch to paid invoice
+
+Hey [First Name],
+
+Following up on OneServ. Made a short video showing exactly what it does on a real job.
+
+5 minutes. No slides. Just the app:
+→ Job created and tech dispatched in 60 seconds
+→ Good/better/best invoice built on site
+→ Customer signs. Payment collected. Done.
+
+[INSERT LOOM VIDEO LINK]
+
+If that's faster than your current workflow — it's worth the 14-day free trial.
+
+go.oneserv.app — no credit card needed.
+
+— Dutch
+520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Cold Email 3 · Day 8 · Social Proof</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Re: OneServ — one more thing
+
+Hey [First Name],
+
+Last follow-up on this.
+
+Plumbing and HVAC companies switching from HouseCall Pro and ServiceTitan are telling me the same thing: setup was 30 minutes, their techs use it without being told to, and they stopped chasing invoices.
+
+If you want to see for yourself — 14 days free, no credit card: go.oneserv.app
+
+Or call me directly: 520-444-7488. I answer my own phone.
+
+— Dutch Conner
+Trusted Plumbing & Water Heaters | OneServ</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Cold Email 4 · Day 14 · Final + Breakup</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Closing the loop
+
+Hey [First Name],
+
+Last email — promise.
+
+If the timing isn't right or you're locked into a contract — totally understood. I'll stop following up.
+
+If anything changes: go.oneserv.app or 520-444-7488.
+
+Built by a plumber for plumbers. That part doesn't change.
+
+— Dutch</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Sequence 2 — Trial User Onboarding (Auto-Send After Signup)</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Onboarding Email 1 · Immediate · Welcome</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Welcome to OneServ — Dutch here personally
+
+Hey [First Name],
+
+Dutch Conner here — I built OneServ and I personally reach out to every new user.
+
+You just started your 14-day trial. Here's the fastest way to see if it's right for your shop:
+
+Step 1: Add your company info (2 min)
+Step 2: Add one tech — even if it's just you (1 min)
+Step 3: Load 3 services into your pricebook (5 min)
+Step 4: Create a test job and dispatch it (2 min)
+Step 5: Build a test invoice and close it (3 min)
+
+That's 13 minutes to see the whole workflow.
+
+If you want me to walk you through it live — I do 15-minute personal onboarding calls for every new user. Just reply to this email or call me at 520-444-7488.
+
+Welcome to OneServ.
+
+— Dutch
+go.oneserv.app</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Onboarding Email 2 · Day 2 · Check-In</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Did you get your first job in?
+
+Hey [First Name],
+
+Checking in — did you get a chance to run a test job in OneServ yet?
+
+If you hit any wall — confusing step, something that didn't work, anything — I want to know about it. Reply directly to this email. I read every response.
+
+If you want me to walk you through setup live: 15 minutes, screen share, you'll have your first real job dispatched before we hang up.
+
+Just say the word.
+
+— Dutch
+520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Onboarding Email 3 · Day 5 · Pricebook Push</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: The pricebook is where the money is
+
+Hey [First Name],
+
+If you've dispatched a job but haven't loaded your pricebook yet — that's the next step.
+
+This is where OneServ does the most work for you:
+→ Your services with photos
+→ 3-option pricing (good/better/best)
+→ Financing button built in
+
+When your tech pulls this up at the door — customers see a professional presentation, not a number scribbled on a form.
+
+If you want help importing your existing pricebook — I'll do it with you on a call. Takes about 20 minutes.
+
+Reply here or call: 520-444-7488.
+
+— Dutch</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Onboarding Email 4 · Day 10 · Trial Ending Soon</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Your trial ends in 4 days
+
+Hey [First Name],
+
+Your 14-day OneServ trial ends on [date].
+
+If you've been using it — pick your plan at go.oneserv.app. Pro and Business plan signups still get my complete plumbing pricebook free while spots last.
+
+If you haven't had a chance to dig in yet — reply to this and tell me what got in the way. I'll either fix it or extend your trial. Either way I want you to have a real shot at seeing what this does for your shop.
+
+If it's not a fit — just let me know. No hard feelings and no awkward cancellation. I'd rather know why so I can make it better.
+
+— Dutch Conner
+520-444-7488</div>
+  </div>
+</div>
+
+<!-- ══════════════════ TEXTS ══════════════════ -->
+<div class="panel" id="panel-texts">
+  <div class="sec-head">
+    <span class="sec-badge badge-orange">Channel 2</span>
+    <span class="sec-title">Text Message Scripts</span>
+  </div>
+  <p class="sec-desc">Use these for warm contacts — signups, JV partners who gave their number, and supply house contacts. Never blast cold contacts via text until Salesmsg A2P is approved and lists are properly opted in.</p>
+
+  <h3>New Signup Texts — Send Within 2 Hours of Signup</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">New Signup Text · Version A</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch Conner here, founder of OneServ. You just signed up — I personally reach out to every new user. Got 10 minutes this week for me to walk you through it live? 520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">New Signup Text · Version B</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch here. Built OneServ, you just signed up. Quick question — what made you sign up? Trying to make sure the app actually solves the right problem for you. Reply anytime. — 520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">New Signup Text · Login Bug Acknowledgment</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch Conner, OneServ founder. Found out we had a bug in our login flow that may have blocked you from getting in. It's fixed now. Sorry about that — want me to walk you through it personally? Takes 10 minutes. — 520-444-7488</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Trial Follow-Up Texts</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Day 3 — No Login Detected</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch here. Noticed you haven't logged into OneServ yet. Did something get in the way? Happy to jump on a 15-min call and walk you through setup. Just reply or call me back at 520-444-7488.</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Day 10 — Trial Ending Soon</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch from OneServ. Your trial ends in 4 days. Have you had a chance to run any jobs through it? Happy to help you get the most out of the remaining time — or answer any questions before you decide. — 520-444-7488</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>JV Partner Texts — Warm Contacts Only</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">After JV Email Goes Unanswered 48 hrs</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch Conner here. Sent you an email about a partner arrangement for OneServ — pays you for every member of [Group/Show] who signs up. Just wanted to make sure it didn't get buried. Worth 5 minutes? — 520-444-7488</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">After Partner Says Yes — Confirmation</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch here. Excited to work together on this. I'll have your referral link and asset kit over to you within 48 hours. When are you thinking for your first mention to [audience]? Want to make sure I'm ready to onboard anyone who comes through.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ JV OUTREACH ══════════════════ -->
+<div class="panel" id="panel-jv">
+  <div class="sec-head">
+    <span class="sec-badge badge-purple">Channel 3</span>
+    <span class="sec-title">JV Outreach — The New Offer</span>
+  </div>
+  <p class="sec-desc">The $30 flat rate is gone. The new offer is structured, compelling, and hard to say no to. Full first month payout. Pilot option for skeptics. Demo video closes the gap.</p>
+
+  <div class="tip tip-purple">
+    <strong>Why they said no before:</strong> Trust deficit + commitment fear + no proof. The new approach fixes all three: Named program with tiers (credibility) + 30-day pilot with no commitment (removes fear) + demo video (proof). Lead with the pilot. Not the full JV. The pilot is a much easier yes.
+  </div>
+
+  <h3>The New Offer — Lead With This</h3>
+  <div class="tip tip-green">
+    <strong>New standard offer:</strong> Full first paid month per verified customer. Average $149. No cap. Paid within 7 days of 30-day retention check. For skeptics: 30-day pilot, one mention, no commitment, $50 per signup to start.<br><br>
+    <strong>For big partners (25k+ audience):</strong> Full first month + $50/month for months 2–4 per active account. That's up to $349 per customer for a 4-month window.
+  </div>
+
+  <h3>Re-Pitch Script — For the 3 Who Said No</h3>
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">Re-Pitch DM — Admins Who Said No</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Hey [Name] — Dutch again. I appreciate you getting back to me earlier.
+
+I've restructured the offer since we talked and wanted to share it in case it changes things.
+
+New offer: I pay you the full first month of every paid customer you send — average $149 per signup, no cap. For context that means if 10 of your members become paid customers you'd earn roughly $1,490 from one post.
+
+And if you want to test it first with no commitment — here's what I'm calling the 30-day pilot:
+
+· You mention OneServ once to your group
+· Your members get 30 days free (not 14 — extended for your audience)
+· You earn $50 for every member who becomes a paying customer
+· After 30 days — if the numbers are good, we move to the full program. If not, no obligation to continue.
+
+I also just finished a 5-minute demo video showing the app on a real job. Happy to send it over so you can see exactly what you'd be recommending before you decide anything.
+
+Worth a look?
+
+— Dutch
+520-444-7488</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>New Partner Outreach — Email Sequence</h3>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">JV Email 1 · Day 1 · Lead With Pilot</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: 30-day test — I pay you for every signup, no commitment required
+
+Hey [Name],
+
+I'm Dutch Conner — working plumber in Arizona, founder of OneServ field service software, and author of Charge What You're Worth — Home Services Edition.
+
+I'm looking for partners who want to run a 30-day pilot with their audience. Here's how it works:
+
+· You mention OneServ once to your [members/listeners/readers]
+· They get 30 days free — extended trial, no credit card
+· You earn the full first paid month per customer who converts (avg $149)
+· After 30 days — if numbers are good, we keep going. If not, you walk away having earned whatever you earned
+
+No exclusivity. No minimum. No commitment beyond the 30 days.
+
+I built OneServ because I was paying HouseCall Pro $291/month in add-ons for a 3-truck plumbing shop. Your audience is exactly who I built this for.
+
+I have a 5-minute demo video showing the app on a real job. Want me to send it over?
+
+— Dutch Conner
+Founder, OneServ | Owner, Trusted Plumbing & Water Heaters
+520-444-7488 | go.oneserv.app</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">JV Email 2 · Day 4 · Send the Video</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: 5-minute demo — decide after you see it
+
+Hey [Name],
+
+Following up — attaching the demo video I mentioned.
+
+[LOOM LINK]
+
+5 minutes. Real job. Dispatch to paid invoice without calling the office once.
+
+This is what you'd be recommending to your audience. Watch it and decide.
+
+If you like what you see — I can have your co-branded page and referral link ready within 48 hours of you saying go.
+
+Questions? Call or text me directly: 520-444-7488.
+
+— Dutch</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">JV Email 3 · Day 8 · The ROI Math</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Quick math on what this could look like for you
+
+Hey [Name],
+
+One more follow-up — wanted to share what the numbers look like for an audience your size.
+
+Conservative estimate for [X] audience/members:
+· 10% see the mention: [X × 10%] people
+· 20% click through: [result] clicks
+· 30% start a trial: [result] trials
+· 25% convert to paid: [result] customers
+· Full first month payout: [result × $149] in your pocket
+
+From one mention.
+
+That's not a guarantee — that's the conservative math based on average B2B SaaS conversion rates. Your engaged audience would likely beat those numbers.
+
+30-day pilot, no commitment: worth finding out.
+
+go.oneserv.app or 520-444-7488.
+
+— Dutch Conner</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-header"><span class="copy-title">JV Email 4 · Day 14 · Final</span><button class="copy-btn" onclick="copyBlock(this)">Copy</button></div>
+    <div class="copy-body">Subject: Last note on this
+
+Hey [Name],
+
+Last follow-up.
+
+If the timing isn't right — completely understood. Save my number: 520-444-7488. When the timing is right, I'm easy to find.
+
+If you know someone else in the trades media space who might be interested — I'd appreciate the intro.
+
+go.oneserv.app if you ever want to see what a plumber built when he got fed up with HouseCall Pro.
+
+— Dutch Conner
+Trusted Plumbing & Water Heaters | OneServ</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>JV Target Priority List</h3>
+  <div class="week">
+    <div class="week-head"><span class="week-badge" style="background:var(--green);">Tier 1 — Contact This Week</span><span class="week-title">Highest Leverage Targets</span></div>
+    <div class="week-body"><ul>
+      <li>Austin Davis — YouTube 83k — [email found] — send demo video + pilot offer</li>
+      <li>Ryan Redding — Blue Collar CEO — LinkedIn connected — follow up once he accepts</li>
+      <li>Chris Garrison — Blue Collar Millionaire Podcast — bluecollarmillionaire.net</li>
+      <li>Blue Collar Millionaire Facebook — 302k members — 5 admins — re-pitch with new offer</li>
+      <li>Plumbing & Fire Protection admin — active conversation — send re-pitch + demo video</li>
+    </ul></div>
+  </div>
+  <div class="week">
+    <div class="week-head"><span class="week-badge" style="background:var(--accent2);">Tier 2 — Contact Next Week</span><span class="week-title">Strong Fits</span></div>
+    <div class="week-body"><ul>
+      <li>Brad Herda — Blue-Collar BS Podcast — bluecollarbs.com — book angle works here</li>
+      <li>Service Plumbers of Canada admin — re-pitch with full first month offer</li>
+      <li>Painting Contractors group admin — re-pitch with pilot offer</li>
+      <li>3 Substack newsletter writers in trades space — find this week</li>
+      <li>2 LinkedIn newsletter writers in home service space — find this week</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════════ TRACKER ══════════════════ -->
+<div class="panel" id="panel-tracker">
+  <div class="sec-head">
+    <span class="sec-badge badge-teal">Weekly</span>
+    <span class="sec-title">Weekly Tracker — 3 Channels Only</span>
+  </div>
+  <p class="sec-desc">Review every Friday. Update numbers. Identify what moved the needle. Cut what didn't. Double down on what did.</p>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--accent2);">___</div>
+      <div class="kpi-label">LinkedIn Posts This Week</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--accent2);">___</div>
+      <div class="kpi-label">LinkedIn Connections Added</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--accent2);">___</div>
+      <div class="kpi-label">Profile Views This Week</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--orange);">___</div>
+      <div class="kpi-label">Cold Emails Sent (Instantly)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--orange);">___</div>
+      <div class="kpi-label">Email Open Rate %</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--orange);">___</div>
+      <div class="kpi-label">Email Replies Received</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--purple);">___</div>
+      <div class="kpi-label">JV Partners Contacted</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--purple);">___</div>
+      <div class="kpi-label">JV Partners Active</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--purple);">___</div>
+      <div class="kpi-label">Partner Referral Clicks</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--green);">___</div>
+      <div class="kpi-label">New Trial Signups</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--green);">___</div>
+      <div class="kpi-label">Active Trials Total</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num" style="color:var(--green);">___</div>
+      <div class="kpi-label">Paid Users Total</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Weekly Review Questions</h3>
+  <div class="week">
+    <div class="week-head"><span class="week-badge">Every Friday</span><span class="week-title">Answer These 4 Questions Before You Plan Next Week</span></div>
+    <div class="week-body"><ul>
+      <li><strong>What drove the most signups this week?</strong> — LinkedIn post? JV referral? Email reply? Do more of that.</li>
+      <li><strong>What got zero results?</strong> — Cut it or change the approach next week. Don't repeat failure.</li>
+      <li><strong>Which JV conversations are alive?</strong> — Follow up on all active conversations Monday morning.</li>
+      <li><strong>What's the #1 thing that would move the needle most next week?</strong> — That goes on the top of Monday's task list.</li>
+    </ul></div>
+  </div>
+
+  <div class="tip tip-green">
+    <strong>The Only Number That Matters:</strong> Paid users. Everything else — impressions, email opens, connection requests, JV conversations — is a leading indicator. Good leading indicators with no paid conversions means something in the funnel is broken. Bad leading indicators means the top of funnel needs work. Check paid users first. Then work backwards.
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyBlock(btn) {
+  const body = btn.closest('.copy-block').querySelector('.copy-body');
+  navigator.clipboard.writeText(body.innerText).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
