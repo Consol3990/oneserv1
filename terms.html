@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="https://go.oneserv.app/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms of Service — OneServ</title>
+<link rel="icon" type="image/png" href="https://go.oneserv.app/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -107,6 +107,26 @@
   }
   .summary-box p { font-size: 0.95rem; color: #93b4ff; line-height: 1.65; margin: 0; }
   .summary-box strong { color: #c4d8ff; }
+  .sms-box {
+    background: rgba(26,86,255,0.06);
+    border: 2px solid rgba(26,86,255,0.3);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .sms-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--blue-light);
+    margin-bottom: 12px;
+  }
+  .sms-box p { color: #93b4ff; font-size: 0.95rem; margin-bottom: 10px; }
+  .sms-box ul { color: #93b4ff; font-size: 0.95rem; padding-left: 20px; }
+  .sms-box ul li { margin-bottom: 8px; }
+  .sms-box strong { color: #c4d8ff; }
   h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
@@ -149,7 +169,7 @@
 <div class="wrap">
   <div class="page-badge">Legal</div>
   <h1>Terms of <span>Service</span></h1>
-  <p class="updated">Last updated: March 30, 2026 &nbsp;·&nbsp; Consolidated Assets LLC d/b/a OneServ &nbsp;·&nbsp; Arizona</p>
+  <p class="updated">Last updated: April 13, 2026 &nbsp;·&nbsp; Consolidated Assets LLC d/b/a OneServ &nbsp;·&nbsp; Arizona</p>
 
   <div class="summary-box">
     <p><strong>Plain English summary:</strong> Use OneServ for your legitimate business. Pay your subscription on time. Your data belongs to you. We're not responsible if the software causes problems with your business operations. Either side can cancel anytime. Don't do anything illegal with it.</p>
@@ -160,7 +180,7 @@
   <p>If you are using OneServ on behalf of a business, you represent that you have authority to bind that business to these terms.</p>
 
   <h2>2. The Service</h2>
-  <p>OneServ provides field service management software including job dispatch, invoicing, pricebook management, sales presentation tools, and related features for small trade businesses.</p>
+  <p>OneServ provides field service management software including job dispatch, invoicing, pricebook management, sales presentation tools, customer communication tools, and related features for small trade businesses including plumbers, HVAC technicians, electricians, and other home service providers.</p>
   <p>We reserve the right to update, modify, or discontinue features at any time. We will make reasonable efforts to notify active subscribers of significant changes.</p>
 
   <h2>3. Your Account</h2>
@@ -175,17 +195,57 @@
     <li><strong>Business</strong> — $249/month (up to 10 mobile users)</li>
   </ul>
   <p>All subscriptions begin with a <strong>14-day free trial</strong>. No credit card is required to start your trial. Billing begins automatically at the end of the trial period unless you cancel.</p>
-  <p>Payments are processed by Stripe. Subscriptions renew monthly on the same date each month. You can cancel at any time from your account settings — your access continues through the end of the paid period.</p>
+  <p>Payments are processed by Stripe. Subscriptions renew monthly on the same date each month. You can cancel at any time — your access continues through the end of the paid period.</p>
   <p>We do not offer refunds for partial months. If you have a billing issue, contact us directly and we will work with you to resolve it fairly.</p>
 
   <h2>5. Your Data</h2>
   <p>Your business data — jobs, customers, invoices, pricebook entries — belongs to you. We do not claim ownership of any data you enter into OneServ.</p>
   <p>You may request an export of your data at any time by emailing <a href="mailto:dutch@oneserv.app">dutch@oneserv.app</a>. Upon account cancellation, your data will be retained for 30 days and then deleted, unless you request deletion sooner or an export beforehand.</p>
 
-  <h2>6. Acceptable Use</h2>
+  <h2>6. SMS Communications & TCPA Compliance</h2>
+
+  <div class="sms-box">
+    <h3>SMS Terms — Read Carefully</h3>
+
+    <p><strong>Two categories of SMS messaging are enabled through OneServ:</strong></p>
+
+    <p><strong>Category A — OneServ platform SMS (to subscribers):</strong><br>
+    By signing up for OneServ and providing your phone number, you consent to receive recurring informational SMS messages from Consolidated Assets LLC d/b/a OneServ regarding your account, free trial, onboarding steps, and platform updates. These are not marketing messages — they are transactional and informational communications related to your OneServ account.</p>
+
+    <p><strong>Category B — Customer-care SMS on behalf of service businesses (to end customers):</strong><br>
+    OneServ enables home service businesses using the platform to send informational/customer-care SMS notifications to their end customers. By providing your phone number to a service business using OneServ, and by opting in at the point of service, you consent to receive the following types of informational messages from that service business:</p>
+    <ul>
+      <li>Appointment confirmations and reminders</li>
+      <li>Technician en route alerts (e.g. "Your technician is on the way")</li>
+      <li>Job completion notices</li>
+      <li>Invoice delivery and payment notifications</li>
+      <li>Review requests following completed service</li>
+    </ul>
+    <p>These messages are sent on behalf of the service business, not by OneServ for marketing purposes. All messages are informational and customer-care in nature — not promotional or marketing.</p>
+
+    <p><strong>Consent:</strong> Consent to receive SMS is not required as a condition of purchase or service. You may opt out at any time without affecting your access to services.</p>
+
+    <p><strong>Opt-out:</strong> Reply <strong>STOP</strong> to any message to unsubscribe immediately. You will receive one confirmation and no further messages will be sent from that sender.</p>
+
+    <p><strong>Help:</strong> Reply <strong>HELP</strong> to any message for assistance, or contact us at <a href="mailto:dutch@oneserv.app" style="color:#4f80ff;">dutch@oneserv.app</a> or 520-444-7488.</p>
+
+    <p><strong>Message frequency:</strong> Varies. OneServ subscribers typically receive up to 5 messages per month. End customers of service businesses typically receive 2–5 messages per service appointment.</p>
+
+    <p><strong>Message and data rates may apply</strong> depending on your wireless carrier and plan.</p>
+
+    <p><strong>No sharing:</strong> SMS opt-in data and consent will not be shared with third parties for their own marketing purposes. Opt-in data is shared only with Twilio (our SMS carrier/aggregator) as necessary to deliver the described messages.</p>
+
+    <p><strong>Carriers:</strong> Supported carriers include AT&amp;T, Verizon, T-Mobile, and others. Carriers are not liable for delayed or undelivered messages.</p>
+
+    <p><strong>Subscriber responsibility:</strong> OneServ subscribers who use the platform to send SMS messages to their customers are responsible for ensuring their customers have provided appropriate consent to receive those messages. Subscribers agree to use the SMS feature only for legitimate customer-care communications related to services their customers have requested, and to honor all opt-out requests promptly.</p>
+  </div>
+
+  <h2>7. Acceptable Use</h2>
   <p>You agree to use OneServ only for lawful purposes in connection with your legitimate trade business. You may not:</p>
   <ul>
     <li>Use the service to engage in fraudulent, deceptive, or illegal activity</li>
+    <li>Send SMS messages to recipients who have not provided consent</li>
+    <li>Use the SMS feature for marketing, promotional, or spam messages</li>
     <li>Attempt to reverse engineer, copy, or resell the OneServ software</li>
     <li>Share your account credentials with users outside your business</li>
     <li>Use the service in a way that could damage, disable, or impair our infrastructure</li>
@@ -193,19 +253,31 @@
   </ul>
   <p>We reserve the right to suspend or terminate accounts that violate these terms without refund.</p>
 
-  <h2>7. Availability & Uptime</h2>
+  <h2>8. Availability & Uptime</h2>
   <p>We work hard to keep OneServ available at all times but we do not guarantee uninterrupted service. Scheduled maintenance, infrastructure updates, or circumstances beyond our control may cause temporary downtime. We will make reasonable efforts to communicate planned outages in advance.</p>
 
-  <h2>8. Limitation of Liability</h2>
+  <h2>9. Limitation of Liability</h2>
   <p>OneServ is provided "as is." To the maximum extent permitted by Arizona law, Consolidated Assets LLC is not liable for any indirect, incidental, special, or consequential damages arising from your use of the service, including but not limited to lost revenue, lost data, or business interruption.</p>
   <p>Our total liability for any claim related to OneServ shall not exceed the amount you paid us in the three months prior to the event giving rise to the claim.</p>
 
-  <h2>9. Cancellation</h2>
+  <h2>10. Cancellation</h2>
   <p>You can cancel your subscription at any time from your account settings or by emailing <a href="mailto:dutch@oneserv.app">dutch@oneserv.app</a>. There are no cancellation fees and no hard feelings.</p>
   <p>We may suspend or terminate your account if you violate these terms, fail to pay your subscription, or if we discontinue the service, with reasonable notice where possible.</p>
 
-  <h2>10. Governing Law</h2>
+  <h2>11. Governing Law</h2>
   <p>These terms are governed by the laws of the State of Arizona, without regard to conflict of law principles. Any disputes shall be resolved in the courts of Arizona.</p>
 
-  <h2>11. Changes to These Terms</h2>
-  <p>We may update these terms from time to time. If we make material changes we will notify active subscribers by email at least 14 days before the changes take effect. Continued use of OneServ 
+  <h2>12. Changes to These Terms</h2>
+  <p>We may update these terms from time to time. If we make material changes we will notify active subscribers by email at least 14 days before the changes take effect. Continued use of OneServ after that date constitutes acceptance of the updated terms.</p>
+
+  <h2>13. Contact</h2>
+  <div class="contact-card">
+    <p><strong>Consolidated Assets LLC d/b/a OneServ</strong><br>
+    Email: <a href="mailto:dutch@oneserv.app">dutch@oneserv.app</a><br>
+    Phone: <a href="tel:+15204447488">520-444-7488</a><br>
+    State of incorporation: Arizona</p>
+  </div>
+</div>
+
+</body>
+</html>
